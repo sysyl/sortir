@@ -1,0 +1,22 @@
+<html lang="fr">
+<head></head>
+<body>
+    <h3>Inscription à une sortie</h3>
+    <p>{{ utilisateur.nom }} {{ utilisateur.prenom }} vient de s'inscrire à une sortie :</p>
+    <p>
+        Nom de la sortie : <b>{{ sortie.nom }}</b><br>
+        Organisateur : {{ utilisateur.nom }} {{ utilisateur.prenom }}<br>
+        Date de la sortie : {{ sortie.dateHeureDebut | date('d/m/Y H:i') }}<br>
+        Date fin inscription : {{ sortie.dateLimiteInscription | date('d/m/Y H:i') }}<br>
+        Durée (en min) : {{ sortie.duree }}<br>
+        Nb places : {{ sortie.nbInscriptionMax }}<br>
+        Ville : {{ sortie.lieu.ville.nom }}<br>
+        Lieu : {{ sortie.lieu.nom }}<br>
+        Adresse : {{ sortie.lieu.adresse }}<br>
+        Description : {{ sortie.commentaire }}<br>
+    </p>
+    <p>
+        <a href="http://localhost:8000/sortir-com/public/sortie/{{ sortie.id }}">Lien direct vers la sortie</a>
+    </p>
+</body>
+</html>

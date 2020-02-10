@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} | Profil{% endblock %}
+
+{% block body %}
+
+    <div class="container-fluid pt-4">
+        <div class="row">
+            <div class="col">
+                <h2>Mon profil</h2>
+                <hr>
+            </div>
+        </div>
+        {{ form_start(formUser) }}
+        <div class="row justify-content-center mt-4">
+            <div class="col-12 col-lg-3 text-center">
+                {% if user.pictureFilename != null %}
+                    <img width="250" height="250" src="{{ asset('uploads/pictures/' ~ user.pictureFilename) }}">
+                {% else %}
+                    <img width="250" height="250" src="{{ asset('assets/img/default-user-image.png') }}">
+                {% endif %}
+            </div>
+        </div>
+        <div class="row justify-content-center mt-4">
+            <div class="col-12 col-md-6 col-lg-4">
+                {{ form_row(formUser.pseudo) }}
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+            </div>
+        </div>
+        <div class="row justify-content-center mt-2">
+            <div class="col-12 col-md-6 col-lg-4">
+                {{ form_row(formUser.nom) }}
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                {{ form_row(formUser.prenom) }}
+            </div>
+        </div>
+        <div class="row justify-content-center mt-2">
+            <div class="col-12 col-md-6 col-lg-4">
+                {{ form_row(formUser.mail) }}
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                {{ form_row(formUser.telephone) }}
+            </div>
+        </div>
+        <div class="row justify-content-center mt-2">
+            <div class="col-12 col-md-6 col-lg-4">
+                {{ form_row(formUser.site) }}
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                {{ form_row(formUser.picture) }}
+            </div>
+        </div>
+        <div class="row justify-content-center mt-2">
+            <div class="col-12 col-md-6 col-lg-4">
+                {{ form_row(formUser.password) }}
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="row mt-4">
+                    <div class="col">
+                        {{ form_row(formUser.publicationParSite) }}
+                    </div>
+                    <div class="col">
+                        {{ form_row(formUser.OrganisateurInscriptionDesistement) }}
+                    </div>
+                </div>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <div class="row mt-4">
+                        <div class="col">
+                            {{ form_row(formUser.administrateurPublication) }}
+                        </div>
+                        <div class="col">
+                            {{ form_row(formUser.administrationModification) }}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row justify-content-center mb-4">
+            <div class="col-6 col-md-4 col-lg-2 text-center">
+                <button class="btn btn-success mt-4" type="submit">Confirmer</button>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2 text-center">
+                <a class="btn btn-light mt-4" href="{{ path('profil_detail', {'id':user.id}) }}">Annuler</a>
+            </div>
+        </div>
+        {{ form_end(formUser) }}
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script rel="script/javascript" src="{{ asset('js/profile.js') }}"></script>
+{% endblock %}

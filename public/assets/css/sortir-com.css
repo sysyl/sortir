@@ -1,0 +1,39 @@
+html {
+    font-family: 'Raleway', sans-serif;
+}
+
+input, button, submit {
+    display: inline-block;
+    border:none;
+    background-color: transparent;
+    color: #007bff;
+
+}
+
+.form-inline-delete {
+    display: inline-block;
+}
+
+.form-inline-delete:hover button {
+    text-decoration: underline;
+}
+
+.faux-lien {
+    padding: 0 !important;
+}
+.faux-lien:hover {
+    text-decoration: underline;
+}
+
+.show-phone-tr {
+    display: none;
+}
+
+@media screen and (max-width: 768px) {
+    .hide-phone {
+        display: none;
+    }
+    .show-phone-tr {
+        display: table-row;
+    }
+}

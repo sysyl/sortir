@@ -1,0 +1,190 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} | Administration{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row mt-3">
+        <div class="col">
+            <h3>Administration</h3>
+            <hr>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2">
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                {% if onglet_visible == 'Utilisateurs' %}
+                    <a class="nav-link active" id="v-pills-utilisateurs-tab" data-toggle="pill" href="#v-pills-utilisateurs">Utilisateurs</a>
+                {% else %}
+                    <a class="nav-link" id="v-pills-utilisateurs-tab" data-toggle="pill" href="#v-pills-utilisateurs">Utilisateurs</a>
+                {% endif %}
+                {% if onglet_visible == 'Villes' %}
+                    <a class="nav-link active" id="v-pills-villes-tab" data-toggle="pill" href="#v-pills-villes">Villes</a>
+                {% else %}
+                    <a class="nav-link" id="v-pills-villes-tab" data-toggle="pill" href="#v-pills-villes">Villes</a>
+                {% endif %}
+                {% if onglet_visible == 'Sites' %}
+                    <a class="nav-link active" id="v-pills-sites-tab" data-toggle="pill" href="#v-pills-sites">Sites</a>
+                {% else %}
+                    <a class="nav-link" id="v-pills-sites-tab" data-toggle="pill" href="#v-pills-sites">Sites</a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-8">
+            <div class="tab-content" id="v-pills-tabContent">
+                {% if onglet_visible == 'Utilisateurs' %}
+                    <div class="tab-pane fade show active" id="v-pills-utilisateurs">
+                {% else %}
+                    <div class="tab-pane fade show" id="v-pills-utilisateurs">
+                {% endif %}
+                    <div class="row">
+                        <div class="col-lg-4 border-right">
+                            <input class="form-control" type="text" id="searchUser" placeholder="Chercher un utilisateur...">
+                        </div>
+                        <div class="col text-center border-right">
+                            <a class="btn btn-success" href="{{ path('admin_addUser') }}">Ajouter un utilisateur</a>
+                        </div>
+                        <div class="col">
+                            {{ form_start(formImportFile) }}
+                            {{ form_row(formImportFile.file_csv) }}
+                        </div>
+                        <div class="col">
+                            {{ form_row(formImportFile.Importer) }}
+                            {{ form_end(formImportFile) }}
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col">
+                            <table class="table table-striped">
+                                <thead class="thead-dark">
+                                <tr>
+                                    <th>Pseudo</th>
+                                    <th>Prénom Nom</th>
+                                    <th>Mail</th>
+                                    <th>Téléphone</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for utilisateur in utilisateurs %}
+                                    {% if utilisateur.actif == 1 %}
+                                        <tr>
+                                    {% else %}
+                                        <tr class="table-danger">
+                                    {% endif %}
+                                            <td><a href="{{ path('profil_detail',{'id':utilisateur.id}) }}">{{ utilisateur.pseudo }}</a></td>
+                                            <td><a href="{{ path('profil_detail',{'id':utilisateur.id}) }}">{{ utilisateur.prenom }} {{ utilisateur.nom }}</a></td>
+                                            <td><a href="mailto:{{ utilisateur.mail }}">{{ utilisateur.mail }}</a></td>
+                                            <td>{{ utilisateur.telephone }}</td>
+                                            <td>
+                                                {% if utilisateur.id != app.user.id %}
+                                                    {% if utilisateur.actif == 1 %}
+                                                        <a href="{{ path('utilisateur_desactiver', {'id':utilisateur.id}) }}">Désactiver</a>
+                                                    {% else %}
+                                                        <a href="{{ path('utilisateur_activer', {'id':utilisateur.id}) }}">Activer</a>
+                                                    {% endif %}
+                                                    <a href="{{ path('utilisateur_delete', {'id':utilisateur.id}) }}">- Supprimer</a>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                {% if onglet_visible == 'Villes' %}
+                    <div class="tab-pane fade show active" id="v-pills-villes">
+                {% else %}
+                    <div class="tab-pane fade show" id="v-pills-villes">
+                {% endif %}
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <input class="form-control" type="text" id="searchVille" placeholder="Chercher une ville...">
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col">
+                                <table class="table table-striped">
+                                    <thead class="thead-dark">
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Code postal</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for ville in villes %}
+                                        <tr>
+                                            <td>{{ ville.nom }}</td>
+                                            <td>{{ ville.codePostal }}</td>
+                                            <td>
+                                                <a href="{{ path('ville_edit', {'id':ville.id}) }}">Modifier</a>
+    {#                                            <a href="{{ path('ville_delete', {'id':ville.id}) }}">- Supprimer</a>#}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    {{ form_start(formVille) }}
+                                    <tr>
+                                        <td>{{ form_widget(formVille.nom) }}</td>
+                                        <td>{{ form_widget(formVille.codePostal) }}</td>
+                                        <td>
+                                            <button class="faux-lien" type="submit">Ajouter</button>
+                                        </td>
+                                    </tr>
+                                    {{ form_end(formVille) }}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                {% if onglet_visible == 'Sites' %}
+                    <div class="tab-pane fade show active" id="v-pills-sites">
+                {% else %}
+                    <div class="tab-pane fade show" id="v-pills-sites">
+                {% endif %}
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <input class="form-control" type="text" id="searchSite" placeholder="Chercher un site...">
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col">
+                                <table class="table table-striped">
+                                    <thead class="thead-dark">
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for site in sites %}
+                                        <tr>
+                                            <td>{{ site.nom }}</td>
+                                            <td>
+                                                <a href="{{ path('site_edit', {'id':site.id}) }}">Modifier</a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    {{ form_start(formSite) }}
+                                    <tr>
+                                        <td>{{ form_widget(formSite.nom) }}</td>
+                                        <td>
+                                            <button class="faux-lien" type="submit">Ajouter</button>
+                                        </td>
+                                    </tr>
+                                    {{ form_end(formSite) }}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}
+
+            {% block javascripts %}
+                {{ parent() }}
+                <script rel="script/javascript" src="{{ asset('js/admin.js') }}"></script>
+            {% endblock %}

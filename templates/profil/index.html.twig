@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} | Profil{% endblock %}
+
+{% block body %}
+
+    <div class="container-fluid pt-4">
+        <div class="row">
+            <div class="col">
+                <h3>Mon profil</h3>
+                <hr>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-4">
+            <div class="col-12 col-lg-3 text-center">
+                {% if user_profil.pictureFilename != null %}
+                    <img width="250" height="250" src="{{ asset('uploads/pictures/' ~ user_profil.pictureFilename) }}">
+                {% else %}
+                    <img width="250" height="250" src="{{ asset('assets/img/default-user-image.png') }}">
+                {% endif %}
+            </div>
+        </div>
+        <div class="row justify-content-center mt-4">
+            <div class="col-12 col-md-6 col-lg-4 text-center">
+                <h4>{{ user_profil.pseudo }}</h4>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-4">
+            <div class="col-12 col-md-6 col-lg-4 text-center">
+                Prénom : {{ user_profil.prenom }}</a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 text-center">
+                Nom : {{ user_profil.nom }}</a>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-4">
+            <div class="col-12 col-md-6 col-lg-4 text-center">
+                Mail : <a href="mailto:{{ user_profil.mail }}">{{ user_profil.mail }}</a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 text-center">
+                Téléphone : {{ user_profil.telephone }}</a>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-4">
+            <div class="col-12 col-md-6 col-lg-4 text-center">
+                Site de rattachement : {{ user_profil.site.nom }}</a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 text-center">
+                {% if user_profil.admin == 1 %}
+                    <b class="text-danger">Administrateur</b>
+                {% endif %}
+            </div>
+        </div>
+        {% if app.user.id == user_profil.id  %}
+            <div class="row justify-content-center mt-4">
+                <div class="col-12 col-md-6 col-lg-4 text-center">
+                    {% if user_profil.publicationParSite == 1 %}
+                        Notification pour le site : ✅
+                    {% else %}
+                        Notification pour le site : ❌
+                    {% endif %}
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 text-center">
+                    {% if user_profil.OrganisateurInscriptionDesistement == 1 %}
+                        Notification inscriptions/désistements : ✅
+                    {% else %}
+                        Notification inscriptions/désistements : ❌
+                    {% endif %}
+                </div>
+            </div>
+            {% if is_granted('ROLE_ADMIN') %}
+                <div class="row justify-content-center mt-4">
+                    <div class="col-12 col-md-6 col-lg-4 text-center">
+                        {% if user_profil.administrateurPublication == 1 %}
+                            Notification administration des publications : ✅
+                        {% else %}
+                            Notification administration des publications : ❌
+                        {% endif %}
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-4 text-center">
+                        {% if user_profil.administrationModification == 1 %}
+                            Notification administration des modifications : ✅
+                        {% else %}
+                            Notification administration des modifications : ❌
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+        {% if app.user.id == user_profil.id  %}
+        <div class="row mt-5">
+            <div class="col text-center">
+                <a class="btn btn-info" href="{{ path('profil_update') }}">Modifier</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+{% endblock %}

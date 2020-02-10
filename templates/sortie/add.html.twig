@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+{#{%  form_theme sortieForm 'bootstrap_4_layout.html.twig' %}#}
+
+{% block title %}Créer une sortie | {{ parent() }}{% endblock %}
+
+{% block body %}
+    <div class="container-fluid pt-3">
+        <div class="row">
+            <div class="col">
+                <h3>Créer une sortie</h3>
+                <hr>
+            </div>
+        </div>
+        {{ form_start(sortieForm) }}
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-6 col-lg-4">
+                {{ form_row(sortieForm.nom) }}
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-6 col-lg-4">
+                {{ form_row(sortieForm.dateHeureDebut) }}
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                {{ form_row(sortieForm.dateLimiteInscription) }}
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-6 col-lg-4">
+                {{ form_row(sortieForm.duree) }}
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                {{ form_row(sortieForm.nbInscriptionMax) }}
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-6 col-lg-4">
+                {{ form_row(sortieForm.lieu) }}
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-8">
+                {{ form_row(sortieForm.commentaire) }}
+            </div>
+        </div>
+        <div class="row justify-content-center mt-4">
+            <div class="col-6 col-md-4 col-lg-2 text-center">
+                {{ form_row(sortieForm.publier) }}
+            </div>
+            <div class="col-6 col-md-4 col-lg-2 text-center">
+                {{ form_row(sortieForm.enregistrer) }}
+            </div>
+        </div>
+        {{ form_end(sortieForm) }}
+    </div>
+{% endblock %}
+

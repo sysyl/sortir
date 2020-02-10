@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../MangaNoHako8/.idea/MangaNoHako.iml" filepath="$PROJECT_DIR$/../MangaNoHako8/.idea/MangaNoHako.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/sortir.iml" filepath="$PROJECT_DIR$/.idea/sortir.iml" />
     </modules>
   </component>
