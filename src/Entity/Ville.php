@@ -67,14 +67,14 @@ class Ville
         return $this;
     }
 
-    public function getCode_postal(): ?string
+    public function getCodepostal(): ?string
     {
         return $this->code_postal;
     }
 
-    public function setCodePostal(string $codePostal): self
+    public function setCodePostal(string $code_postal): self
     {
-        $this->code_postal = $codePostal;
+        $this->code_postal = $code_postal;
 
         return $this;
     }
