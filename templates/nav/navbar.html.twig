@@ -33,12 +33,13 @@
                     <a class="btn btn-danger" href="{{ path('logout') }}">Déconnexion</a>
                 </li>
             {% else %}
-                <li class="nav-item">
+
+ {#               <li class="nav-item">
                     <a class="btn btn-primary" href="{{ path('login') }}">Connexion</a>
-                </li>
-                <li class="nav-item">
+                </li>#}
+               {# <li class="nav-item">
                     <a class="btn btn-primary" href="{{ path('register') }}">S'inscrire</a>
-                </li>
+                </li>#}
             {% endif %}
         </ul>
     </div>

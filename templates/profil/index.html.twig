@@ -26,24 +26,62 @@
             </div>
         </div>
         <div class="row justify-content-center mt-4">
-            <div class="col-12 col-md-6 col-lg-4 text-center">
-                Prénom : {{ user_profil.prenom }}</a>
+            <div class="col-12 col-md-6 col-lg-4 ">
+                <div class="row">
+                    <div class="col text-right">
+                        Prénom :
+                    </div>
+                    <div class="col text-left">
+                        {{ user_profil.prenom }}
+                    </div>
+                </div>
+
             </div>
             <div class="col-12 col-md-6 col-lg-4 text-center">
-                Nom : {{ user_profil.nom }}</a>
+                <div class="row">
+                    <div class="col text-right">
+                        Nom :
+                    </div>
+                    <div class="col text-left">
+                        {{ user_profil.nom }}
+                    </div>
+                </div>
+
             </div>
         </div>
         <div class="row justify-content-center mt-4">
             <div class="col-12 col-md-6 col-lg-4 text-center">
-                Mail : <a href="mailto:{{ user_profil.mail }}">{{ user_profil.mail }}</a>
+
+                <div class="row">
+                    <div class="col text-right">
+                        Mail :
+                    </div>
+                    <div class="col text-left">
+                        <a href="mailto:{{ user_profil.mail }}">{{ user_profil.mail }}</a>
+                    </div>
+                </div>
             </div>
             <div class="col-12 col-md-6 col-lg-4 text-center">
-                Téléphone : {{ user_profil.telephone }}</a>
+                <div class="row">
+                    <div class="col text-right">
+                        Téléphone :
+                    </div>
+                    <div class="col text-left">
+                        {{ user_profil.telephone }}
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row justify-content-center mt-4">
             <div class="col-12 col-md-6 col-lg-4 text-center">
-                Site de rattachement : {{ user_profil.site.nom }}</a>
+                <div class="row">
+                    <div class="col text-right">
+                        Site de rattachement :
+                    </div>
+                    <div class="col text-left">
+                        {{ user_profil.site.nom }}
+                    </div>
+                </div>
             </div>
             <div class="col-12 col-md-6 col-lg-4 text-center">
                 {% if user_profil.admin == 1 %}
@@ -54,6 +92,7 @@
         {% if app.user.id == user_profil.id  %}
             <div class="row justify-content-center mt-4">
                 <div class="col-12 col-md-6 col-lg-4 text-center">
+
                     {% if user_profil.publicationParSite == 1 %}
                         Notification pour le site : ✅
                     {% else %}
