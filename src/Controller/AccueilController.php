@@ -16,6 +16,7 @@ class AccueilController extends AbstractController
      * @param AuthenticationUtils $authenticationUtils
      * @return Response
      */
+
     public function login(Request $request, AuthenticationUtils $authenticationUtils): Response
     {
         if ($this->getUser()) {

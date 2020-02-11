@@ -142,9 +142,11 @@
                     {% if sortie.etat.libelle == "Publiée" or sortie.etat.libelle == "Clôturée" %}
 
                         {% set jeSuisInscrit = false %}
-                        {% for rejoindre in rejoindres if not jeSuisInscrit %}
-                            {% if rejoindre.sonUtilisateur.id == app.user.id %}
-                                {% set jeSuisInscrit = true %}
+                        {% for rejoindre in rejoindres %}
+                            {% if not jeSuisInscrit %}
+                                {% if rejoindre.sonUtilisateur.id == app.user.id %}
+                                    {% set jeSuisInscrit = true %}
+                                {% endif %}
                             {% endif %}
                         {% endfor %}
 
@@ -174,9 +176,11 @@
                     {% if sortie.etat.libelle == "Publiée" or sortie.etat.libelle == "Clôturée" %}
 
                         {% set jeSuisInscrit = false %}
-                        {% for rejoindre in rejoindres if not jeSuisInscrit %}
-                            {% if rejoindre.sonUtilisateur.id == app.user.id %}
-                                {% set jeSuisInscrit = true %}
+                        {% for rejoindre in rejoindres %}
+                            {% if not jeSuisInscrit %}
+                                {% if rejoindre.sonUtilisateur.id == app.user.id %}
+                                    {% set jeSuisInscrit = true %}
+                                {% endif %}
                             {% endif %}
                         {% endfor %}
 
@@ -197,6 +201,7 @@
 
         </div>
 
+{#        API GOOGLE MAP#}
 {#        Affichage de la localisation de la ville sur une carte #}
 {#        <hr>#}
 {#        <div class="row">#}

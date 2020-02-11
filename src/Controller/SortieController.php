@@ -11,6 +11,7 @@ use App\Form\SortieModifierType;
 use App\Form\SortieType;
 use App\Utils\MailerManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Swift_Message;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -59,7 +60,7 @@ class SortieController extends AbstractController
                             array_push($lesMailsAdmins, $admin->getMail());
                         }
                     }
-                    $message = (new \Swift_Message('sortir.com | Nouvelle publication'))
+                    $message = (new Swift_Message('sortir.com | Nouvelle publication'))
                         ->setFrom('noreply@sortir.com')
                         ->setTo($lesMailsAdmins)
                         ->setBody(
@@ -81,7 +82,7 @@ class SortieController extends AbstractController
                             array_push($lesMailsUserSite, $admin->getMail());
                         }
                     }
-                    $message = (new \Swift_Message('sortir.com | (Admin) Nouvelle publication'))
+                    $message = (new Swift_Message('sortir.com | (Admin) Nouvelle publication'))
                         ->setFrom('noreply@sortir.com')
                         ->setTo($lesMailsUserSite)
                         ->setBody(
@@ -182,7 +183,7 @@ class SortieController extends AbstractController
                     array_push($lesMailsAdmins, $admin->getMail());
                 }
             }
-            $message = (new \Swift_Message('sortir.com | Modification sortie'))
+            $message = (new Swift_Message('sortir.com | Modification sortie'))
                 ->setFrom('noreply@sortir.com')
                 ->setTo($lesMailsAdmins)
                 ->setBody(
@@ -281,7 +282,7 @@ class SortieController extends AbstractController
                     array_push($lesMailsAdmins, $admin->getMail());
                 }
             }
-            $message = (new \Swift_Message('sortir.com | (Admin) Nouvelle publication'))
+            $message = (new Swift_Message('sortir.com | (Admin) Nouvelle publication'))
                 ->setFrom('noreply@sortir.com')
                 ->setTo($lesMailsAdmins)
                 ->setBody(
@@ -304,7 +305,7 @@ class SortieController extends AbstractController
                     array_push($lesMailsUserSite, $user->getMail());
                 }
             }
-            $message = (new \Swift_Message('sortir.com | Nouvelle publication dans votre Site'))
+            $message = (new Swift_Message('sortir.com | Nouvelle publication dans votre Site'))
                 ->setFrom('noreply@sortir.com')
                 ->setTo($lesMailsUserSite)
                 ->setBody(

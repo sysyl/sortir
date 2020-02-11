@@ -98,6 +98,7 @@
                     </tr>
                     </thead>
                     <tbody>
+
                     {% for sortie in sortiesCreees %}
                         <tr>
                             <td>{{ sortie.nom }}</td>
@@ -125,6 +126,7 @@
                             <td><b>{{ sortie.etat.libelle }}</b></td>
                         </tr>
                     {% endfor %}
+
                     {% for sortie in sortiesPubliees %}
 
 {#                        {% set jeSuisInscrit = false %}#}
@@ -133,6 +135,16 @@
 {#                                {% set jeSuisInscrit = true %}#}
 {#                            {% endif %}#}
 {#                        {% endfor %}#}
+
+                        {% set jeSuisInscrit = false %}
+                        {% for rejoindre in rejoindres %}
+                            {% if not jeSuisInscrit %}
+                                {% if rejoindre.saSortie.id == sortie.id %}
+                                    {% set jeSuisInscrit = true %}
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+
 
                         <tr>
                             <td>{{ sortie.nom }}</td>
@@ -167,14 +179,17 @@
                             <td class="text-primary"><b>{{ sortie.etat.libelle }}</b></td>
                         </tr>
                     {% endfor %}
+
                     {% for sortie in sortiesCloturees %}
 
-{#                        {% set jeSuisInscrit = false %}#}
-{#                        {% for rejoindre in rejoindres if not jeSuisInscrit %}#}
-{#                            {% if rejoindre.saSortie.id == sortie.id %}#}
-{#                                {% set jeSuisInscrit = true %}#}
-{#                            {% endif %}#}
-{#                        {% endfor %}#}
+                        {% set jeSuisInscrit = false %}
+                        {% for rejoindre in rejoindres %}
+                            {% if not jeSuisInscrit %}
+                                {% if rejoindre.saSortie.id == sortie.id %}
+                                    {% set jeSuisInscrit = true %}
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
 
                         <tr>
                             <td>{{ sortie.nom }}</td>
@@ -202,14 +217,17 @@
                             <td class="text-warning"><b>{{ sortie.etat.libelle }}</b></td>
                         </tr>
                     {% endfor %}
+
                     {% for sortie in sortiesEncours %}
 
-{#                        {% set jeSuisInscrit = false %}#}
-{#                        {% for rejoindre in rejoindres if not jeSuisInscrit %}#}
-{#                            {% if rejoindre.saSortie.id == sortie.id %}#}
-{#                                {% set jeSuisInscrit = true %}#}
-{#                            {% endif %}#}
-{#                        {% endfor %}#}
+                        {% set jeSuisInscrit = false %}
+                        {% for rejoindre in rejoindres %}
+                            {% if not jeSuisInscrit %}
+                                {% if rejoindre.saSortie.id == sortie.id %}
+                                    {% set jeSuisInscrit = true %}
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
 
                         <tr>
                             <td>{{ sortie.nom }}</td>
@@ -232,14 +250,17 @@
                             <td class="text-info"><b>{{ sortie.etat.libelle }}</b></td>
                         </tr>
                     {% endfor %}
+
                     {% for sortie in sortiesTerminee %}
 
-{#                        {% set jeSuisInscrit = false %}#}
-{#                        {% for rejoindre in rejoindres if not jeSuisInscrit %}#}
-{#                            {% if rejoindre.saSortie.id == sortie.id %}#}
-{#                                {% set jeSuisInscrit = true %}#}
-{#                            {% endif %}#}
-{#                        {% endfor %}#}
+                        {% set jeSuisInscrit = false %}
+                        {% for rejoindre in rejoindres %}
+                            {% if not jeSuisInscrit %}
+                                {% if rejoindre.saSortie.id == sortie.id %}
+                                    {% set jeSuisInscrit = true %}
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
 
                         <tr>
                             <td>{{ sortie.nom }}</td>
@@ -260,14 +281,17 @@
                             <td class="text-success"><b>{{ sortie.etat.libelle }}</b></td>
                         </tr>
                     {% endfor %}
+
                     {% for sortie in sortiesAnnulees %}
 
-{#                        {% set jeSuisInscrit = false %}#}
-{#                        {% for rejoindre in rejoindres if not jeSuisInscrit %}#}
-{#                            {% if rejoindre.saSortie.id == sortie.id %}#}
-{#                                {% set jeSuisInscrit = true %}#}
-{#                            {% endif %}#}
-{#                        {% endfor %}#}
+                        {% set jeSuisInscrit = false %}
+                        {% for rejoindre in rejoindres %}
+                            {% if not jeSuisInscrit %}
+                                {% if rejoindre.saSortie.id == sortie.id %}
+                                    {% set jeSuisInscrit = true %}
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
 
                         <tr>
                             <td>{{ sortie.nom }}</td>
@@ -292,14 +316,17 @@
                     {% endfor %}
 
                     {% if is_granted('ROLE_ADMIN') %}
+
                         {% for sortie in sortiesArchivees %}
 
-{#                            {% set jeSuisInscrit = false %}#}
-{#                            {% for rejoindre in rejoindres if not jeSuisInscrit %}#}
-{#                                {% if rejoindre.saSortie.id == sortie.id %}#}
-{#                                    {% set jeSuisInscrit = true %}#}
-{#                                {% endif %}#}
-{#                            {% endfor %}#}
+                            {% set jeSuisInscrit = false %}
+                            {% for rejoindre in rejoindres %}
+                                {% if not jeSuisInscrit %}
+                                    {% if rejoindre.saSortie.id == sortie.id %}
+                                        {% set jeSuisInscrit = true %}
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
 
                             <tr class="table-secondary">
                                 <td>{{ sortie.nom }}</td>
