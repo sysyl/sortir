@@ -42,6 +42,7 @@ class ProfilController extends AbstractController
      */
     public function update(Request $request, EntityManagerInterface $emi, UserPasswordEncoderInterface $passwordEncoder) {
         $user = $emi->getRepository(Utilisateur::class)->find($this->getUser()->getId());
+        $user2 = $user->getPassword();
         $formUser = $this->createForm(UpdateUtilisateurType::class, $user);
         $formUser->handleRequest($request);
         if ($formUser->isSubmitted() && $formUser->isValid()) {
@@ -68,11 +69,19 @@ class ProfilController extends AbstractController
                 $user->setPictureFilename($newFilename);
             }
 
-            $hashed = $passwordEncoder->encodePassword($user, $user->getPassword());
-            $user->setPassword($hashed);
+            $pass = $user->getPassword();
+            if (!is_null($pass)) {
+                $hashed = $passwordEncoder->encodePassword($user, $user->getPassword());
+                $user->setPassword($hashed);
+            }
+            else {
+                $user->setPassword($user2);
+            }
+
             $emi->persist($user);
             $emi->flush();
             return $this->redirectToRoute("profil_detail", ["id"=>$user->getId()]);
+
         }
         return $this->render("profil/update.html.twig", [
             'formUser' => $formUser->createView(),

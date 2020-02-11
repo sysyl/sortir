@@ -132,10 +132,9 @@ class AdministrationController extends AbstractController
         // Setter les champs obligatoires pour la table Utilisateur
         $utilisateur->setAdmin(0);
         $utilisateur->setActif(1);
-        $utilisateur->setPassword(
-            $passwordEncoder->encodePassword(
-                $utilisateur,
-                $utilisateur->getPrenom().$utilisateur->getNom()
+        $utilisateur->setPassword($passwordEncoder->encodePassword(
+            $utilisateur,
+            $utilisateur->getPrenom().$utilisateur->getNom()
             )
         );
 
