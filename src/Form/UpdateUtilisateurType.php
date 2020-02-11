@@ -92,6 +92,7 @@ class UpdateUtilisateurType extends AbstractType
                     ],
                 ])
                 ->add('password', RepeatedType::class, [
+                    'required'   => false,
                     'type' => PasswordType::class,
                     'first_options' => [
                         'label' => 'Nouveau mot de passe :',

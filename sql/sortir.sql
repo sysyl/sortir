@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mar. 11 fév. 2020 à 10:21
+-- Généré le :  mar. 11 fév. 2020 à 15:09
 -- Version du serveur :  10.4.10-MariaDB
 -- Version de PHP :  7.3.12
 
@@ -33,7 +33,20 @@ CREATE TABLE IF NOT EXISTS `etat` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `libelle` varchar(70) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `etat`
+--
+
+INSERT INTO `etat` (`id`, `libelle`) VALUES
+(6, 'Brouillon'),
+(7, 'Publiée'),
+(8, 'Annulée'),
+(9, 'Clôturée'),
+(10, 'En cours'),
+(11, 'Terminée'),
+(12, 'Archivée');
 
 -- --------------------------------------------------------
 
@@ -49,7 +62,16 @@ CREATE TABLE IF NOT EXISTS `lieu` (
   `adresse` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_2F577D59A73F0036` (`ville_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `lieu`
+--
+
+INSERT INTO `lieu` (`id`, `ville_id`, `nom`, `adresse`) VALUES
+(1, 226, 'Levrette Cafe', '30 quai Fernand Crouan, Parc des chantiers - Pont 1 du Nantilus, 44000 Nantes'),
+(2, 226, 'L\'engrenage', '4 Allée de l\'Île Gloriette, 44000 Nantes'),
+(3, 226, 'La Bodega', '8 Rue Beauregard, 44000 Nantes');
 
 -- --------------------------------------------------------
 
@@ -86,7 +108,7 @@ CREATE TABLE IF NOT EXISTS `rejoindre` (
   PRIMARY KEY (`id`),
   KEY `IDX_56E78755187326B7` (`son_utilisateur_id`),
   KEY `IDX_56E78755DB3FCCAB` (`sa_sortie_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -136,7 +158,16 @@ CREATE TABLE IF NOT EXISTS `sortie` (
   KEY `IDX_3C3FD3F2D5E86FF` (`etat_id`),
   KEY `IDX_3C3FD3F2F6BD1646` (`site_id`),
   KEY `IDX_3C3FD3F2D936B2FA` (`organisateur_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `sortie`
+--
+
+INSERT INTO `sortie` (`id`, `lieu_id`, `etat_id`, `site_id`, `organisateur_id`, `nom`, `date_heure_debut`, `duree`, `date_limite_inscription`, `nb_inscription_max`, `commentaire`, `nb_inscrits`, `motif`) VALUES
+(1, 1, 8, 2, 7, 'Petite soirée entre potes', '2020-02-11 21:00:00', 2, '2020-02-11 20:00:00', 10, 'Soirée au bar', 0, 'Sans raison'),
+(2, 2, 7, 2, 7, 'Soirée entre filles', '2020-02-22 21:00:00', 3, '2020-02-20 21:00:00', 5, 'Soirée à l\'Engrenage', 0, NULL),
+(3, 1, 7, 2, 7, 'Ca va etre chaud', '2020-02-12 09:30:00', 1, '2020-02-11 17:30:00', 4, 'Sortie de test', 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -167,7 +198,7 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
   UNIQUE KEY `UNIQ_1D1C63B35126AC48` (`mail`),
   UNIQUE KEY `UNIQ_1D1C63B386CC499D` (`pseudo`),
   KEY `IDX_1D1C63B3F6BD1646` (`site_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `utilisateur`
@@ -176,7 +207,7 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
 INSERT INTO `utilisateur` (`id`, `site_id`, `nom`, `prenom`, `telephone`, `mail`, `admin`, `actif`, `password`, `picture_filename`, `publication_par_site`, `organisateur_inscription_desistement`, `administrateur_publication`, `pseudo`, `administration_modification`, `notif_veille_sortie`, `token`) VALUES
 (1, 1, 'langer', 'sylvain', '0786745425', 'langer.sylvain95@gmail.com', 1, 1, '$argon2id$v=19$m=65536,t=4,p=1$Nk9SWmZMSFNTRmEuS0pBSQ$cI39h6m6gzLq5bDWrvMlnpd7pGJmqRHv4LTNjq34AEU', NULL, NULL, NULL, NULL, 'sylbouille', NULL, NULL, NULL),
 (7, 2, 'poussin', 'rouge', '0786745425', 'poussin.rouge@gmail.com', 0, 1, '$argon2id$v=19$m=65536,t=4,p=1$cGgvQ2VyVkVlQ0VVczBBbw$vcD4focaNy5FHW5JXZKy+SyDTSQc/63uxxbQOUOhLiE', NULL, 0, 0, 0, 'Red', 0, NULL, NULL),
-(8, 1, 'langer', 'sylvain', '0786745425', 'sylvain.langer2019@campus-eni.fr', 0, 0, 'sylvainlanger', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '5bb1c42eb12cf68e3b4c9f9e6d89ded9aa77273e');
+(10, 1, 'test', 'test', '0000000000', 'test@test.com', 0, 1, '$argon2id$v=19$m=65536,t=4,p=1$L1dOLjJzU0pTbFhWbTN0Vw$1jE/BuvIoXZhdFKgSefCBG9FQw6sBq5VwLkVVGoDcEY', NULL, 0, 0, 0, 'jacky', 0, NULL, NULL);
 
 -- --------------------------------------------------------
 

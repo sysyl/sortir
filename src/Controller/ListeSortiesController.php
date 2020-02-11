@@ -12,6 +12,7 @@ use App\Form\SiteType;
 use App\Form\VilleType;
 use Doctrine\ORM\EntityManagerInterface;
 use phpDocumentor\Reflection\Types\Integer;
+use Swift_Mailer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -72,10 +73,12 @@ class ListeSortiesController extends AbstractController
      * @Route("/rejoindre_sortie/{id}", name="rejoindre_sortie")
      * @param EntityManagerInterface $emi
      * @param Sortie $sortie
+     * @param Request $request
+     * @param Swift_Mailer $mailer
      * @return RedirectResponse
      * @throws \Exception
      */
-    public function rejoindre(EntityManagerInterface $emi, Sortie $sortie, Request $request, \Swift_Mailer $mailer)
+    public function rejoindre(EntityManagerInterface $emi, Sortie $sortie, Request $request, Swift_Mailer $mailer)
     {
         $referer = $request->headers->get('referer');
 
@@ -139,10 +142,10 @@ class ListeSortiesController extends AbstractController
      * @param Request $request
      * @param EntityManagerInterface $emi
      * @param Sortie $sortie
-     * @param \Swift_Mailer $mailer
+     * @param Swift_Mailer $mailer
      * @return RedirectResponse
      */
-    public function desister(Request $request, EntityManagerInterface $emi, Sortie $sortie, \Swift_Mailer $mailer)
+    public function desister(Request $request, EntityManagerInterface $emi, Sortie $sortie, Swift_Mailer $mailer)
     {
         $referer = $request->headers->get('referer');
 
@@ -274,10 +277,10 @@ class ListeSortiesController extends AbstractController
      * @param $id
      * @param Request $request
      * @param EntityManagerInterface $em
-     * @param \Swift_Mailer $mailer
+     * @param Swift_Mailer $mailer
      * @return RedirectResponse|Response
      */
-    public function editVille($id, Request $request, EntityManagerInterface $em, \Swift_Mailer $mailer) {
+    public function editVille($id, Request $request, EntityManagerInterface $em, Swift_Mailer $mailer) {
 
         //traiter un formulaire
         $ville = $em->getRepository(Ville::class)->find($id);
@@ -306,10 +309,10 @@ class ListeSortiesController extends AbstractController
      * @param $id
      * @param Request $request
      * @param EntityManagerInterface $em
-     * @param \Swift_Mailer $mailer
+     * @param Swift_Mailer $mailer
      * @return RedirectResponse|Response
      */
-    public function editSite($id, Request $request, EntityManagerInterface $em, \Swift_Mailer $mailer) {
+    public function editSite($id, Request $request, EntityManagerInterface $em, Swift_Mailer $mailer) {
 
         //traiter un formulaire
         $site = $em->getRepository(Site::class)->find($id);
