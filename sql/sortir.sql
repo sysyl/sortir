@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  lun. 10 fév. 2020 à 12:56
+-- Généré le :  mar. 11 fév. 2020 à 10:21
 -- Version du serveur :  10.4.10-MariaDB
 -- Version de PHP :  7.3.12
 
@@ -99,7 +99,16 @@ CREATE TABLE IF NOT EXISTS `site` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nom` varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `site`
+--
+
+INSERT INTO `site` (`id`, `nom`) VALUES
+(1, 'SAINT HERBLAIN'),
+(2, 'CHARTRES DE BRETAGNE'),
+(3, 'LA ROCHE SUR YON');
 
 -- --------------------------------------------------------
 
@@ -147,18 +156,27 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
   `actif` tinyint(1) NOT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `picture_filename` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `publication_par_site` tinyint(1) NOT NULL,
-  `organisateur_inscription_desistement` tinyint(1) NOT NULL,
-  `administrateur_publication` tinyint(1) NOT NULL,
-  `pseudo` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `administration_modification` tinyint(1) NOT NULL,
-  `notif_veille_sortie` tinyint(1) NOT NULL,
+  `publication_par_site` tinyint(1) DEFAULT NULL,
+  `organisateur_inscription_desistement` tinyint(1) DEFAULT NULL,
+  `administrateur_publication` tinyint(1) DEFAULT NULL,
+  `pseudo` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `administration_modification` tinyint(1) DEFAULT NULL,
+  `notif_veille_sortie` tinyint(1) DEFAULT NULL,
   `token` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQ_1D1C63B35126AC48` (`mail`),
   UNIQUE KEY `UNIQ_1D1C63B386CC499D` (`pseudo`),
   KEY `IDX_1D1C63B3F6BD1646` (`site_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `utilisateur`
+--
+
+INSERT INTO `utilisateur` (`id`, `site_id`, `nom`, `prenom`, `telephone`, `mail`, `admin`, `actif`, `password`, `picture_filename`, `publication_par_site`, `organisateur_inscription_desistement`, `administrateur_publication`, `pseudo`, `administration_modification`, `notif_veille_sortie`, `token`) VALUES
+(1, 1, 'langer', 'sylvain', '0786745425', 'langer.sylvain95@gmail.com', 1, 1, '$argon2id$v=19$m=65536,t=4,p=1$Nk9SWmZMSFNTRmEuS0pBSQ$cI39h6m6gzLq5bDWrvMlnpd7pGJmqRHv4LTNjq34AEU', NULL, NULL, NULL, NULL, 'sylbouille', NULL, NULL, NULL),
+(7, 2, 'poussin', 'rouge', '0786745425', 'poussin.rouge@gmail.com', 0, 1, '$argon2id$v=19$m=65536,t=4,p=1$cGgvQ2VyVkVlQ0VVczBBbw$vcD4focaNy5FHW5JXZKy+SyDTSQc/63uxxbQOUOhLiE', NULL, 0, 0, 0, 'Red', 0, NULL, NULL),
+(8, 1, 'langer', 'sylvain', '0786745425', 'sylvain.langer2019@campus-eni.fr', 0, 0, 'sylvainlanger', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '5bb1c42eb12cf68e3b4c9f9e6d89ded9aa77273e');
 
 -- --------------------------------------------------------
 
@@ -172,7 +190,7 @@ CREATE TABLE IF NOT EXISTS `ville` (
   `nom` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
   `code_postal` varchar(6) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=226 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=228 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `ville`
@@ -403,7 +421,9 @@ INSERT INTO `ville` (`id`, `nom`, `code_postal`) VALUES
 (222, 'LA BOISSE', '01120'),
 (223, 'PARCIEUX', '01600'),
 (224, 'SAINT-DIDIER-D\'AUSSIAT', '01340'),
-(225, 'SAINT-NIZIER-LE-BOUCHOUX', '01560');
+(225, 'SAINT-NIZIER-LE-BOUCHOUX', '01560'),
+(226, 'NANTES', '44000'),
+(227, 'PARIS', '75000');
 
 --
 -- Contraintes pour les tables déchargées

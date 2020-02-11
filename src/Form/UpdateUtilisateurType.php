@@ -52,6 +52,21 @@ class UpdateUtilisateurType extends AbstractType
                 'class' => Site::class,
                 'choice_label' => 'nom'
             ]);
+//            ->add('password', RepeatedType::class, [
+//                'type' => PasswordType::class,
+//                'first_options' => [
+//                    'label' => 'Nouveau mot de passe :',
+//                    'attr' => [
+//                        'maxlength' => 50
+//                    ]
+//                ],
+//                'second_options' => [
+//                    'label' => 'Confirmation :',
+//                    'attr' => [
+//                        'maxlength' => 50
+//                    ]
+//                ]
+//            ]);
 
         if($options['form_action'] != 'addUser') {
             $builder

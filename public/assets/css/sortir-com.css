@@ -37,3 +37,8 @@ input, button, submit {
         display: table-row;
     }
 }
+
+.container {
+    display: flex;
+    justify-content: center;
+}
