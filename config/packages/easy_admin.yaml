@@ -1,0 +1,8 @@
+#easy_admin:
+#  entities:
+#    Users:
+#      class: App\Entity\Utilisateur
+#      list:
+#        filters:
+#          - property: 'id'
+#            type: 'App\Form\Filter\OrganisateurFilterType'

@@ -42,8 +42,6 @@ class SortieController extends AbstractController
             $sortieForm->handleRequest($request);
 
             if($sortieForm->isSubmitted() && $sortieForm->isValid()) {
-                //$sortie->setDateHeureDebut(new \DateTime());
-                //$site = $em->getRepository(Site::class)->find(1);
                 if($sortieForm->get('enregistrer')->isClicked()){
                     $etat = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'Brouillon']);
                     $this->addFlash('warning', "La sortie a été ajoutée à vos brouillons !");

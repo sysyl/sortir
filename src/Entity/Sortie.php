@@ -91,7 +91,6 @@ class Sortie
 
     /**
      * Sortie constructor.
-     * @param $rejoindre
      */
     public function __construct()
     {
