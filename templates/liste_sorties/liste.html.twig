@@ -56,29 +56,33 @@
                 </div>
             </div>
 
+            {#                  <a href="{{ path('liste_sorties_filtered', {'value':'Organizer'}) }}" id="organizer">#}
             <div class="col-12 col-md-6 col-lg-4 mt-2">
                 <div class="form-check mt-2">
-                    <input class="form-check-input" type="checkbox" value="" id="checkbox_jeSuisOrga">
-                    <label class="form-check-label" for="checkbox_jeSuisOrga">
+                    <a href="#organizer" id="organizer" onclick="displayOrganizer();">
+                    <label class="form-check-label" for="organizer">
                         Sorties dont je suis l'organisateur.rice
                     </label>
+                    </a>
                 </div>
                 <div class="form-check mt-2">
-                    <input class="form-check-input" type="checkbox" id="checkbox_jeSuisInsc">
-                    <label class="form-check-label" for="checkbox_jeSuisInsc">
-                        Sorties auxquelles je suis inscrit.e
-                    </label>
+                    <a href="#registered" id="registered" onclick="displayRegistered();">
+                        <label class="form-check-label" for="registered">
+                            Sorties auxquelles je suis inscrit.e
+                        </label>
+                    </a>
                 </div>
                 <div class="form-check mt-2">
-                    <input class="form-check-input" type="checkbox" value="" id="checkbox_jeSuisPasInsc">
-                    <label class="form-check-label" for="checkbox_jeSuisPasInsc">
-                        Sorties auxquelles je ne suis pas inscrit.e
-                    </label>
+                    <a href="#notRegistered" id="notRegistered" onclick="displayNotRegistered();">
+                        <label class="form-check-label" for="notRegistered">
+                            Sorties auxquelles je ne suis pas inscrit.e
+                        </label>
+                    </a>
                 </div>
             </div>
-
-            <div class="col-12 col-md-6 col-lg-4 mt-2">
-                <a class="btn btn-lg btn-success mt-3 hide-phone" href="{{ path('sortie_create') }}">Ajouter une sortie</a>
+            <div class="col-12 col-md-6 col-lg-2">
+                <a class="btn btn-lg btn-outline-success mt-3 hide-phone" href="{{ path('sortie_create') }}">Ajouter une sortie</a>
+                <a class="btn btn-lg btn-outline-success mt-3 hide-phone" href="{{ path('liste_sorties') }}">Toutes les sorties</a>
             </div>
         </div>
 
@@ -97,9 +101,10 @@
                         <th class="hide-phone">Etat</th>
                     </tr>
                     </thead>
-                    <tbody>
-
+                    <tbody id="tbody">
+{#==========================List Sorties Crées#}
                     {% for sortie in sortiesCreees %}
+
                         <tr>
                             <td>{{ sortie.nom }}</td>
                             <td>{{ sortie.dateHeureDebut | date('d/m/Y H:i') }}</td>
@@ -127,14 +132,8 @@
                         </tr>
                     {% endfor %}
 
+{#==========================List Sorties publiees#}
                     {% for sortie in sortiesPubliees %}
-
-{#                        {% set jeSuisInscrit = false %}#}
-{#                        {% for rejoindre in rejoindres if not jeSuisInscrit %}#}
-{#                            {% if rejoindre.saSortie.id == sortie.id %}#}
-{#                                {% set jeSuisInscrit = true %}#}
-{#                            {% endif %}#}
-{#                        {% endfor %}#}
 
                         {% set jeSuisInscrit = false %}
                         {% for rejoindre in rejoindres %}
@@ -144,7 +143,6 @@
                                 {% endif %}
                             {% endif %}
                         {% endfor %}
-
 
                         <tr>
                             <td>{{ sortie.nom }}</td>
@@ -179,6 +177,8 @@
                             <td class="text-primary"><b>{{ sortie.etat.libelle }}</b></td>
                         </tr>
                     {% endfor %}
+
+{#==========================List Sorties closed#}
 
                     {% for sortie in sortiesCloturees %}
 
@@ -218,6 +218,8 @@
                         </tr>
                     {% endfor %}
 
+{#==========================List Sorties EnCours#}
+
                     {% for sortie in sortiesEncours %}
 
                         {% set jeSuisInscrit = false %}
@@ -251,6 +253,8 @@
                         </tr>
                     {% endfor %}
 
+{#==========================List Sorties Terminee#}
+
                     {% for sortie in sortiesTerminee %}
 
                         {% set jeSuisInscrit = false %}
@@ -281,6 +285,9 @@
                             <td class="text-success"><b>{{ sortie.etat.libelle }}</b></td>
                         </tr>
                     {% endfor %}
+
+
+{#==========================List Sorties Cancel#}
 
                     {% for sortie in sortiesAnnulees %}
 
@@ -314,6 +321,9 @@
                             <td class="text-danger"><b>{{ sortie.etat.libelle }}</b></td>
                         </tr>
                     {% endfor %}
+
+
+{#==========================List Sorties Archiv#}
 
                     {% if is_granted('ROLE_ADMIN') %}
 
@@ -360,5 +370,5 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script rel="script/javascript" src="{{ asset('js/filtres.js') }}"></script>
+    <script rel="script/javascript" src="{{ asset('js/filter.js') }}"></script>
 {% endblock %}

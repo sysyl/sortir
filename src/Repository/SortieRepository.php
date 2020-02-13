@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Sortie;
+use App\Entity\Utilisateur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * @method Sortie|null find($id, $lockMode = null, $lockVersion = null)
@@ -44,4 +46,18 @@ class SortieRepository extends ServiceEntityRepository
         // retourne le résultat
         return $query->getResult();
     }
+
+//    public function findRegisterUser() {
+//
+//        $em = $this->getEntityManager();
+//        // on créé la requête DQL
+//        $dql="SELECT *
+//                FROM App\Entity\Sortie s WHERE rejoindre
+//        ";
+//        // on créé l'objet Query
+//        $query=$em->createQuery($dql);
+//        // retourne le résultat
+//        return $query->getResult();
+//    }
+
 }
