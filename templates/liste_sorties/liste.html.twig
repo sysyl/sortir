@@ -27,17 +27,16 @@
         </div>
 
 
-
         <div class="row">
             <div class="col-12 col-md-6 col-lg-4 mt-2">
                 <div class="input-group mt-2">
                     <div class="input-group-prepend">
                         <label class="input-group-text" for="inputGroup_site">Ville</label>
                     </div>
-                    <select class="custom-select" id="inputGroup_site">
-                        <option selected>Toutes les villes</option>
+                    <select class="custom-select" id="inputGroup_site" onchange="displayCity();">
+                        <option selected value="Toutes les villes">Toutes les villes</option>
                         {% for ville in villes %}
-                            <option attr-id={{ville.id}} value="{{ville.nom}}" >{{ville.nom}}</option>
+                            <option id={{ville.id}} value="{{ville.nom}}" >{{ville.nom}}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -45,7 +44,7 @@
                     <div class="input-group-prepend">
                         <label class="input-group-text" for="inputGroup_nom">Nom de la sortie</label>
                     </div>
-                    <input class="form-control" id="inputGroup_nom" type="text">
+                    <input class="form-control" id="inputGroup_nom" type="text" onkeyup="displaySearchValue();">
                 </div>
                 <div class="input-group mt-2">
                     <div class="input-group-prepend">

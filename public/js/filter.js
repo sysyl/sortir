@@ -1,13 +1,58 @@
-const trs = [...document.querySelector('tbody').children];
+let trs = [...document.querySelector('tbody').children];
 let filteredTrs = [...trs];
 
+//trs -> get all table row of my list view
+//tr -> one table row
+
+function displayCity() {
+
+    let input = document.getElementById("inputGroup_site");
+
+    if (input.value === "Toutes les villes") {
+        filteredTrs = filteredTrs.map((tr) => {
+            tr.style.display = 'table-row';
+            return tr;
+        });
+    } else {
+        filteredTrs = filteredTrs.map((tr) => {
+            tr.style.display = 'table-row';
+            const trLabel = tr.children[2].innerText;
+            if (trLabel == input.value) {
+                tr.style.display = 'table-row';
+            } else {
+                tr.style.display = 'none';
+            }
+            return tr;
+        });
+    }
+
+}
+
+function displaySearchValue() {
+
+    let inputValue = document.getElementById("inputGroup_nom").value;
+
+    trs.forEach((tr) => {
+        filteredTrs = filteredTrs.map((tr) => {
+            tr.style.display = 'table-row';
+            if (inputValue) {
+                if (tr.children[0].textContent.toLocaleLowerCase().includes(inputValue.toLocaleLowerCase())) {
+                    tr.style.display = 'table-row';
+                } else {
+                    tr.style.display = 'none';
+                }
+            }
+            return tr;
+        });
+    });
+};
 
 function displayOrganizer() {
 
     filteredTrs = filteredTrs.map((tr) => {
         tr.style.display = 'table-row';
-        const userName = document.querySelector("#orga_pseudo").textContent;
-        const trOrga = tr.children[5].textContent;
+        let userName = document.querySelector("#orga_pseudo").textContent;
+        let trOrga = tr.children[5].textContent;
         if (userName === trOrga) {
             tr.style.display = 'table-row';
         } else if (userName !== trOrga) {
@@ -15,7 +60,6 @@ function displayOrganizer() {
         };
         return tr;
     });
-
 };
 
 function displayRegistered() {
@@ -29,7 +73,6 @@ function displayRegistered() {
         }
         return tr;
         });
-
 };
 
 function displayNotRegistered() {
@@ -43,5 +86,4 @@ function displayNotRegistered() {
         }
         return tr;
     });
-
 };
