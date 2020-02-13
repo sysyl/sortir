@@ -14,30 +14,32 @@
         {{ form_start(formAddUser) }}
         <div class="row justify-content-center">
             <div class="col-12 col-lg-4">
-                {{ form_row(formAddUser.nom) }}
+                <strong>{{ form_row(formAddUser.nom) }}</strong>
             </div>
             <div class="col-12 col-lg-4">
-                {{ form_row(formAddUser.prenom) }}
-            </div>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-12 col-lg-4">
-                {{ form_row(formAddUser.mail) }}
-            </div>
-            <div class="col-12 col-lg-4">
-                {{ form_row(formAddUser.telephone) }}
+                <strong>{{ form_row(formAddUser.mail) }}</strong>
             </div>
         </div>
         <div class="row justify-content-center">
             <div class="col-12 col-lg-4">
-                {{ form_row(formAddUser.site) }}
+                <strong>{{ form_row(formAddUser.prenom) }}</strong>
+            </div>
+            <div class="col-12 col-lg-4">
+                <strong>{{ form_row(formAddUser.telephone) }}</strong>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-4">
+                <strong>{{ form_row(formAddUser.site) }}</strong>
             </div>
             <div class="col-12 col-lg-4">
             </div>
         </div>
         <div class="row mt-3">
-            <div class="col-12 text-center">
-                <button class="btn btn-success" type="submit">Ajouter un utilisateur</button>
+            <div class="col-12 col-lg-6">
+            </div>
+            <div class="col-12 col-lg-6">
+                <button class="btn btn-info" type="submit">Ajouter un utilisateur</button>
             </div>
         </div>
         {{ form_end(formAddUser) }}

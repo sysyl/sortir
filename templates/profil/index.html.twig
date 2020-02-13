@@ -22,79 +22,109 @@
         </div>
         <div class="row justify-content-center mt-4">
             <div class="col-12 col-md-6 col-lg-4 text-center">
-                <h4>{{ user_profil.pseudo }}</h4>
-
+                <h1>{{ user_profil.pseudo }}</h1>
             </div>
         </div>
-        <div class="row justify-content-center mt-4">
-            <div class="col-12 col-md-6 col-lg-4 text-center">
-                Prénom : {{ user_profil.prenom }}</a>
-            </div>
-            <div class="col-12 col-md-6 col-lg-4 text-center">
-                Nom : {{ user_profil.nom }}</a>
-            </div>
-        </div>
-        <div class="row justify-content-center mt-4">
-            <div class="col-12 col-md-6 col-lg-4 text-center">
-                Mail : <a href="mailto:{{ user_profil.mail }}">{{ user_profil.mail }}</a>
-            </div>
-            <div class="col-12 col-md-6 col-lg-4 text-center">
-                Téléphone : {{ user_profil.telephone }}</a>
-            </div>
-        </div>
-        <div class="row justify-content-center mt-4">
-            <div class="col-12 col-md-6 col-lg-4 text-center">
-                Site de rattachement : {{ user_profil.site.nom }}</a>
-            </div>
-            <div class="col-12 col-md-6 col-lg-4 text-center">
-                {% if user_profil.admin == 1 %}
-                    <b class="text-danger">Administrateur</b>
-                {% endif %}
-            </div>
-        </div>
-        {% if app.user.id == user_profil.id  %}
+        <div class="container">
             <div class="row justify-content-center mt-4">
-                <div class="col-12 col-md-6 col-lg-4 text-center">
-                    {% if user_profil.publicationParSite == 1 %}
-                        Notification pour le site : ✅
-                    {% else %}
-                        Notification pour le site : ❌
-                    {% endif %}
+                <div class="col">
+                    <div class="row">
+                        <div class="col text-left"><strong>Prénom</strong></div>
+                        <div class="col text-left">{{ user_profil.prenom }}</div>
+                    </div>
                 </div>
-                <div class="col-12 col-md-6 col-lg-4 text-center">
-                    {% if user_profil.OrganisateurInscriptionDesistement == 1 %}
-                        Notification inscriptions/désistements : ✅
-                    {% else %}
-                        Notification inscriptions/désistements : ❌
+                <div class="col">
+                    <div class="row">
+                        <div class="col text-left"><strong>Nom</strong></div>
+                        <div class="col text-left">{{ user_profil.nom }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center mt-4">
+                <div class="col">
+                    <div class="row">
+                        <div class="col text-left"><strong>Mail</strong></div>
+                        <div class="col text-left"><a href="mailto:{{ user_profil.mail }}">{{ user_profil.mail }}</a></div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col text-left"><strong>Téléphone</strong></div>
+                        <div class="col text-left">{{ user_profil.telephone }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center mt-4">
+                <div class="col">
+                    <div class="row">
+                        <div class="col text-left"><strong>Site</strong></div>
+                        <div class="col text-left">{{ user_profil.site.nom }}</div>
+                    </div>
+                </div>
+                <div class="col text-left">
+                    {% if user_profil.admin == 1 %}
+                        <b class="text-danger">Administrateur</b>
                     {% endif %}
                 </div>
             </div>
-            {% if is_granted('ROLE_ADMIN') %}
+            {% if app.user.id == user_profil.id  %}
                 <div class="row justify-content-center mt-4">
-                    <div class="col-12 col-md-6 col-lg-4 text-center">
-                        {% if user_profil.administrateurPublication == 1 %}
-                            Notification administration des publications : ✅
-                        {% else %}
-                            Notification administration des publications : ❌
-                        {% endif %}
+                    <div class="col">
+                        <div class="row">
+                            <div class="col text-left"><strong>Notification pour le site</strong></div>
+                            {% if user_profil.publicationParSite == 1 %}
+                                <div class="col text-left">✅</div>
+                            {% else %}
+                                <div class="col text-left">❌</div>
+                            {% endif %}
+                        </div>
                     </div>
-                    <div class="col-12 col-md-6 col-lg-4 text-center">
-                        {% if user_profil.administrationModification == 1 %}
-                            Notification administration des modifications : ✅
-                        {% else %}
-                            Notification administration des modifications : ❌
-                        {% endif %}
+                    <div class="col">
+                        <div class="row">
+                            <div class="col text-left"><strong>Notification inscriptions/désistements</strong></div>
+                            {% if user_profil.OrganisateurInscriptionDesistement == 1 %}
+                                <div class="col text-left">✅</div>
+                            {% else %}
+                                <div class="col text-left">❌</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <div class="row justify-content-center mt-4">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col text-left"><strong>Notification administration des publications</strong></div>
+                                {% if user_profil.administrateurPublication == 1 %}
+                                    <div class="col text-left">✅</div>
+                                {% else %}
+                                    <div class="col text-left">❌</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="row">
+                                <div class="col text-left"><strong>Notification administration des modifications</strong></div>
+                                {% if user_profil.administrationModification == 1 %}
+                                    <div class="col text-left">✅</div>
+                                {% else %}
+                                    <div class="col text-left">❌</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
+            {% if app.user.id == user_profil.id  %}
+                <div class="row mt-5">
+                    <div class="col-12 col-lg-6">
+                    </div>
+                    <div class="col-12 col-lg-6">
+                        <a class="btn-lg btn-info" href="{{ path('profil_update') }}">Modifier</a>
                     </div>
                 </div>
             {% endif %}
-        {% endif %}
-        {% if app.user.id == user_profil.id  %}
-        <div class="row mt-5">
-            <div class="col text-center">
-                <a class="btn btn-info" href="{{ path('profil_update') }}">Modifier</a>
-            </div>
         </div>
-        {% endif %}
     </div>
 
 {% endblock %}

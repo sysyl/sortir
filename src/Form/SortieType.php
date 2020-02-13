@@ -76,13 +76,13 @@ class  SortieType extends AbstractType
                 ->add('enregistrer', SubmitType::class, [
                     'label' => 'Enregistrer le brouillon',
                     'attr' => [
-                        'class' => 'btn btn-light'
+                        'class' => 'btn-lg btn-info'
                     ]
                 ])
                 ->add('publier', SubmitType::class, [
                     'label' => 'Publier la sortie',
                     'attr' => [
-                        'class' => 'btn btn-success'
+                        'class' => 'btn-lg btn-info'
                     ]
                 ]);
         }

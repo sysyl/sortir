@@ -43,7 +43,7 @@ class ProfilController extends AbstractController
     public function update(Request $request, EntityManagerInterface $emi, UserPasswordEncoderInterface $passwordEncoder) {
         $user = $emi->getRepository(Utilisateur::class)->find($this->getUser()->getId());
         $user2 = $user->getPassword();
-        $formUser = $this->createForm(UpdateUtilisateurType::class, $user);
+        $formUser = $this->createForm(UpdateUtilisateurType::class, $user, ['role' => $user->getRoles()]);
         $formUser->handleRequest($request);
         if ($formUser->isSubmitted() && $formUser->isValid()) {
             $pictureFile = $formUser['picture']->getData();

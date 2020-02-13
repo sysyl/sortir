@@ -7,52 +7,29 @@
     <div class="container-fluid pt-3">
         <div class="row">
             <div class="col">
-                <h3>Créer une sortie</h3>
+                <h2>Créer une sortie</h2>
                 <hr>
             </div>
         </div>
         {{ form_start(sortieForm) }}
         <div class="row justify-content-center">
             <div class="col-12 col-md-6 col-lg-4">
-                {{ form_row(sortieForm.nom) }}
+                <strong>{{ form_row(sortieForm.nom) }}</strong><br>
+                <strong>{{ form_row(sortieForm.nbInscriptionMax) }}</strong><br>
+                <strong>{{ form_row(sortieForm.duree) }}</strong><br>
+                <strong>{{ form_row(sortieForm.lieu) }}</strong><br>
             </div>
             <div class="col-12 col-md-6 col-lg-4">
-
-            </div>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-12 col-md-6 col-lg-4">
-                {{ form_row(sortieForm.dateHeureDebut) }}
-            </div>
-            <div class="col-12 col-md-6 col-lg-4">
-                {{ form_row(sortieForm.dateLimiteInscription) }}
-            </div>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-12 col-md-6 col-lg-4">
-                {{ form_row(sortieForm.duree) }}
-            </div>
-            <div class="col-12 col-md-6 col-lg-4">
-                {{ form_row(sortieForm.nbInscriptionMax) }}
-            </div>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-12 col-md-6 col-lg-4">
-                {{ form_row(sortieForm.lieu) }}
-            </div>
-            <div class="col-12 col-md-6 col-lg-4">
-            </div>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-12 col-lg-8">
-                {{ form_row(sortieForm.commentaire) }}
+                <strong>{{ form_row(sortieForm.dateHeureDebut) }}</strong><br>
+                <strong>{{ form_row(sortieForm.dateLimiteInscription) }}</strong><br>
+                <strong>{{ form_row(sortieForm.commentaire) }}</strong><br>
             </div>
         </div>
         <div class="row justify-content-center mt-4">
-            <div class="col-6 col-md-4 col-lg-2 text-center">
+            <div class="col-12 col-md-6 col-lg-4">
                 {{ form_row(sortieForm.publier) }}
             </div>
-            <div class="col-6 col-md-4 col-lg-2 text-center">
+            <div class="col-12 col-md-6 col-lg-4">
                 {{ form_row(sortieForm.enregistrer) }}
             </div>
         </div>
