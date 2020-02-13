@@ -1,7 +1,8 @@
 const trs = [...document.querySelector('tbody').children];
 let filteredTrs = [...trs];
 
-
+//trs -> get all table of my view list
+//tr -> one table row
 function displayOrganizer() {
 
     filteredTrs = filteredTrs.map((tr) => {
@@ -15,7 +16,6 @@ function displayOrganizer() {
         };
         return tr;
     });
-
 };
 
 function displayRegistered() {
@@ -29,7 +29,6 @@ function displayRegistered() {
         }
         return tr;
         });
-
 };
 
 function displayNotRegistered() {
@@ -44,4 +43,39 @@ function displayNotRegistered() {
         return tr;
     });
 
+};
+
+// function displaySearchValue() {
+//
+//     let inputValue = document.getElementById("inputGroup_nom").value;
+//
+//     trs.forEach((tr) => {
+//         filteredTrs = filteredTrs.map((tr) => {
+//             tr.style.display = 'table-row';
+//             if (inputValue) {
+//                 tr.children[0].textContent.toLocaleLowerCase().includes(inputValue.toLocaleLowerCase()) ?
+//                     tr.style.display = 'table-row' : tr.style.display = 'none';
+//             }
+//             return tr;
+//         });
+//     });
+// };
+
+function displaySearchValue() {
+
+    let inputValue = document.getElementById("inputGroup_nom").value;
+
+    trs.forEach((tr) => {
+        filteredTrs = filteredTrs.map((tr) => {
+            tr.style.display = 'table-row';
+            if (inputValue) {
+                if (tr.children[0].textContent.toLocaleLowerCase().includes(inputValue.toLocaleLowerCase())) {
+                    tr.style.display = 'table-row';
+                } else {
+                    tr.style.display = 'none';
+                }
+            }
+            return tr;
+        });
+    });
 };
