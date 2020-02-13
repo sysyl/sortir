@@ -45,22 +45,6 @@ function displayNotRegistered() {
 
 };
 
-// function displaySearchValue() {
-//
-//     let inputValue = document.getElementById("inputGroup_nom").value;
-//
-//     trs.forEach((tr) => {
-//         filteredTrs = filteredTrs.map((tr) => {
-//             tr.style.display = 'table-row';
-//             if (inputValue) {
-//                 tr.children[0].textContent.toLocaleLowerCase().includes(inputValue.toLocaleLowerCase()) ?
-//                     tr.style.display = 'table-row' : tr.style.display = 'none';
-//             }
-//             return tr;
-//         });
-//     });
-// };
-
 function displaySearchValue() {
 
     let inputValue = document.getElementById("inputGroup_nom").value;
