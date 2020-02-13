@@ -338,68 +338,72 @@ class ListeSortiesController extends AbstractController
 
     }
 
-    /**
-     * Filtre
-     * @Route("/liste_sorties/filter/{value}", name="liste_sorties_filtered")
-     * @param $value
-     * @param EntityManagerInterface $emi
-     * @return RedirectResponse|Response
-     */
-    public function filter($value, EntityManagerInterface $emi) {
-
-        // LES ETATS
-        $etatCreee = $emi->getRepository( Etat::class)->findOneBy(['libelle' => 'Brouillon']);
-        $etatPubliee = $emi->getRepository( Etat::class)->findOneBy(['libelle' => 'Publiée']);
-        $etatAnnule = $emi->getRepository( Etat::class)->findOneBy(['libelle' => 'Annulée']);
-        $etatCloture = $emi->getRepository( Etat::class)->findOneBy(['libelle' => 'Clôturée']);
-        $etatEncours = $emi->getRepository( Etat::class)->findOneBy(['libelle' => 'En cours']);
-        $etatTerminee = $emi->getRepository( Etat::class)->findOneBy(['libelle' => 'Terminée']);
-        $etatArchive = $emi->getRepository( Etat::class)->findOneBy(['libelle' => 'Archivée']);
-
-        // TOUTE LES VILLES
-        $villes = $emi->getRepository(Ville::class)->findAll();
-        $rejoindres = $emi->getRepository(Rejoindre::class)->findBy(['sonUtilisateur' => $this->getUser()]);
-        $sortiesPhone = $emi->getRepository(Sortie::class)->findBy(['etat' => [$etatCreee, $etatPubliee, $etatCloture, $etatEncours, $etatTerminee], 'site' => $this->getUser()->getSite()]);
-
-        switch ($value) {
-            case "Organizer":
-                // LES REQUETES DE RECUPERATIONS DES SORTIES EN FONCTION DE L'ETAT
-                $sortiesPubliees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatPubliee, 'organisateur' => $this->getUser()]);
-                $sortiesCreees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatCreee, 'organisateur' => $this->getUser()]);
-                $sortiesAnnulees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatAnnule, 'organisateur' => $this->getUser()]);
-                $sortiesCloturees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatCloture, 'organisateur' => $this->getUser()]);
-                $sortiesEncours = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatEncours, 'organisateur' => $this->getUser()]);
-                $sortiesTerminees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatTerminee, 'organisateur' => $this->getUser()]);
-                $sortiesArchivees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatArchive, 'organisateur' => $this->getUser()]);
-                break;
-            case "Registered":
+    //ABANDONNES
+//    /**
+//     * Filtre
+//     * @Route("/liste_sorties/filter/{value}", name="liste_sorties_filtered")
+//     * @param $value
+//     * @param EntityManagerInterface $emi
+//     * @return RedirectResponse|Response
+//     */
+//    public function filter($value, EntityManagerInterface $emi) {
+//
+//        $coucou = [];
+//
+//        // LES ETATS
+//        $etatCreee = $emi->getRepository( Etat::class)->findOneBy(['libelle' => 'Brouillon']);
+//        $etatPubliee = $emi->getRepository( Etat::class)->findOneBy(['libelle' => 'Publiée']);
+//        $etatAnnule = $emi->getRepository( Etat::class)->findOneBy(['libelle' => 'Annulée']);
+//        $etatCloture = $emi->getRepository( Etat::class)->findOneBy(['libelle' => 'Clôturée']);
+//        $etatEncours = $emi->getRepository( Etat::class)->findOneBy(['libelle' => 'En cours']);
+//        $etatTerminee = $emi->getRepository( Etat::class)->findOneBy(['libelle' => 'Terminée']);
+//        $etatArchive = $emi->getRepository( Etat::class)->findOneBy(['libelle' => 'Archivée']);
+//
+//        // TOUTE LES VILLES
+//        $villes = $emi->getRepository(Ville::class)->findAll();
+//        $rejoindres = $emi->getRepository(Rejoindre::class)->findBy(['sonUtilisateur' => $this->getUser()]);
+//        $sortiesPhone = $emi->getRepository(Sortie::class)->findBy(['etat' => [$etatCreee, $etatPubliee, $etatCloture, $etatEncours, $etatTerminee], 'site' => $this->getUser()->getSite()]);
+//
+//        switch ($value) {
+//            case "Organizer":
+//                // LES REQUETES DE RECUPERATIONS DES SORTIES EN FONCTION DE L'ETAT
+//                $sortiesPubliees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatPubliee, 'organisateur' => $this->getUser()]);
+//                $sortiesCreees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatCreee, 'organisateur' => $this->getUser()]);
+//                $sortiesAnnulees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatAnnule, 'organisateur' => $this->getUser()]);
+//                $sortiesCloturees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatCloture, 'organisateur' => $this->getUser()]);
+//                $sortiesEncours = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatEncours, 'organisateur' => $this->getUser()]);
+//                $sortiesTerminees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatTerminee, 'organisateur' => $this->getUser()]);
+//                $sortiesArchivees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatArchive, 'organisateur' => $this->getUser()]);
+//                break;
+//            case "Registered":
 //                for ($i = 0; $i < sizeof($rejoindres); $i++) {
-                    $sortiesPubliees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatPubliee, 'id' => $rejoindres[0]->getSaSortie()]);
-                    $sortiesCreees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatCreee, 'id' => $rejoindres[0]->getSaSortie()]);
-                    $sortiesAnnulees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatAnnule, 'id' => $rejoindres[0]->getSaSortie()]);
-                    $sortiesCloturees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatCloture, 'id' => $rejoindres[0]->getSaSortie()]);
-                    $sortiesEncours = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatEncours, 'id' => $rejoindres[0]->getSaSortie()]);
-                    $sortiesTerminees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatTerminee, 'id' => $rejoindres[0]->getSaSortie()]);
-                    $sortiesArchivees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatArchive,'id' => $rejoindres[0]->getSaSortie()]);
+//                    $sortiesPubliees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatPubliee, 'id' => $rejoindres[$i]->getSaSortie()]);
+//                    $sortiesCreees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatCreee, 'id' => $rejoindres[$i]->getSaSortie()]);
+//                    $sortiesAnnulees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatAnnule, 'id' => $rejoindres[$i]->getSaSortie()]);
+//                    $sortiesCloturees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatCloture, 'id' => $rejoindres[$i]->getSaSortie()]);
+//                    $sortiesEncours = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatEncours, 'id' => $rejoindres[$i]->getSaSortie()]);
+//                    $sortiesTerminees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatTerminee, 'id' => $rejoindres[$i]->getSaSortie()]);
+//                    $sortiesArchivees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatArchive,'id' => $rejoindres[$i]->getSaSortie()]);
+//                    $coucou = $i;
 //                }
-                break;
-            case "NotRegistered":
-                break;
-        }
-
-        return $this->render('liste_sorties/liste.html.twig', [
-
-            'controller_name' => 'ListeSortiesController',
-            'sortiesPubliees' => $sortiesPubliees,
-            'sortiesCreees' => $sortiesCreees,
-            'sortiesAnnulees' => $sortiesAnnulees,
-            'sortiesCloturees' => $sortiesCloturees,
-            'sortiesEncours' => $sortiesEncours,
-            'sortiesTerminee' => $sortiesTerminees,
-            'sortiesArchivees' => $sortiesArchivees,
-            'rejoindres' => $rejoindres,
-            'villes' => $villes,
-            'sortiesPhone' => $sortiesPhone
-        ]);
-    }
+//                break;
+//            case "NotRegistered":
+//                break;
+//        }
+//
+//        return $this->render('liste_sorties/liste.html.twig', [
+//
+//            'controller_name' => 'ListeSortiesController',
+//            'sortiesPubliees' => $sortiesPubliees,
+//            'sortiesCreees' => $sortiesCreees,
+//            'sortiesAnnulees' => $sortiesAnnulees,
+//            'sortiesCloturees' => $sortiesCloturees,
+//            'sortiesEncours' => $sortiesEncours,
+//            'sortiesTerminee' => $sortiesTerminees,
+//            'sortiesArchivees' => $sortiesArchivees,
+//            'rejoindres' => $rejoindres,
+//            'villes' => $villes,
+//            'sortiesPhone' => $sortiesPhone
+//        ]);
+//    }
 }

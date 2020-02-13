@@ -56,24 +56,28 @@
                 </div>
             </div>
 
+            {#                  <a href="{{ path('liste_sorties_filtered', {'value':'Organizer'}) }}" id="organizer">#}
             <div class="col-12 col-md-6 col-lg-4 mt-2">
                 <div class="form-check mt-2">
-                    <a href="{{ path('liste_sorties_filtered', {'value':'Organizer'}) }}" id="organizer">
+                    <a href="#organizer" id="organizer" onclick="displayOrganizer();">
                     <label class="form-check-label" for="organizer">
                         Sorties dont je suis l'organisateur.rice
                     </label>
+                    </a>
                 </div>
                 <div class="form-check mt-2">
-                    <a href="{{ path('liste_sorties_filtered', {'value':'Registered'}) }}" id="registered">
-                    <label class="form-check-label" for="registered">
-                        Sorties auxquelles je suis inscrit.e
-                    </label>
+                    <a href="#registered" id="registered" onclick="displayRegistered();">
+                        <label class="form-check-label" for="registered">
+                            Sorties auxquelles je suis inscrit.e
+                        </label>
+                    </a>
                 </div>
                 <div class="form-check mt-2">
-                    <a href="{{ path('liste_sorties_filtered', {'value':'NotRegistered'}) }}" id="notRegistered">
+                    <a href="#notRegistered" id="notRegistered" onclick="displayNotRegistered();">
                         <label class="form-check-label" for="notRegistered">
                             Sorties auxquelles je ne suis pas inscrit.e
                         </label>
+                    </a>
                 </div>
             </div>
             <div class="col-12 col-md-6 col-lg-2">
@@ -97,7 +101,7 @@
                         <th class="hide-phone">Etat</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tbody">
 {#==========================List Sorties Crées#}
                     {% for sortie in sortiesCreees %}
 
@@ -355,45 +359,6 @@
                         {% endfor %}
                     {% endif %}
 
-{#==========================List of register#}
-
-{#                    {% if registered is selectedchoice == '1' %}#}
-
-{#                        {% for sortie in sortiesPubliees %}#}
-
-{#                            {% for rejoindre in rejoindres %}#}
-
-{#                                    {% if rejoindre.saSortie.id == sortie.id %}#}
-
-{#                                        <tr>#}
-{#                                            <td>{{ sortie.nom }}</td>#}
-{#                                            <td>{{ sortie.dateHeureDebut | date('d/m/Y H:i') }}</td>#}
-{#                                            <td>{{ sortie.lieu.ville.nom }}</td>#}
-{#                                            <td>{{ sortie.nbInscrits }} / {{ sortie.nbInscriptionMax }}</td>#}
-{#                                            <td class="text-center">#}
-{#                                                    <input type="hidden" class="inscrit"  value="1">#}
-{#                                                    ✅#}
-{#                                            </td>#}
-{#                                            <td><a href="{{ path('profil_detail',{'id':sortie.organisateur.id}) }}">{{ sortie.organisateur.pseudo }}</a></td>#}
-{#                                            <td>#}
-{#                                                <a href="{{ path('sortie_detail',{'id':sortie.id}) }}">Afficher</a>#}
-{#                                                <input type="hidden" name="isJeSuisInscrit" value="{{ jeSuisInscrit }}">#}
-{#                                                    <a href="{{ path('desister_sortie',{'id':sortie.id}) }}"> - Se désister</a>#}
-{#                                                {% if sortie.organisateur.id == app.user.id or is_granted('ROLE_ADMIN')%}#}
-{#                                                    <a href="{{ path('sortie_annuler',{'id':sortie.id}) }}"> - Annuler</a>#}
-{#                                                {% endif %}#}
-{#                                            </td>#}
-{#                                            <td class="text-primary"><b>{{ sortie.etat.libelle }}</b></td>#}
-{#                                        </tr>#}
-
-{#                                    {% endif %}#}
-
-{#                            {% endfor %}#}
-
-{#                        {% endfor %}#}
-
-{#                    {% endif %}#}
-
                     </tbody>
                 </table>
             </div>
@@ -403,7 +368,7 @@
 
 {% endblock %}
 
-{#{% block javascripts %}#}
-{#    {{ parent() }}#}
-{#    <script rel="script/javascript" src="{{ asset('js/filtres.js') }}"></script>#}
-{#{% endblock %}#}
+{% block javascripts %}
+    {{ parent() }}
+    <script rel="script/javascript" src="{{ asset('js/filter.js') }}"></script>
+{% endblock %}
