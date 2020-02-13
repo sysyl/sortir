@@ -7,7 +7,7 @@
     <div class="container-fluid pt-4">
         <div class="row">
             <div class="col">
-                <h2>Mon profil</h2>
+                <h2>Modifier mon profil</h2>
                 <hr>
             </div>
         </div>
@@ -23,66 +23,32 @@
         </div>
         <div class="row justify-content-center mt-4">
             <div class="col-12 col-md-6 col-lg-4">
-                {{ form_row(formUser.pseudo) }}
+                <strong>{{ form_row(formUser.pseudo) }}</strong><br>
+                <strong>{{ form_row(formUser.nom) }}</strong><br>
+                <strong>{{ form_row(formUser.prenom) }}</strong><br>
+                <strong>{{ form_row(formUser.mail) }}</strong><br>
+                <strong>{{ form_row(formUser.telephone) }}</strong><br>
+                <strong>{{ form_row(formUser.site) }}</strong><br>
+                <strong>{{ form_row(formUser.password) }}</strong><br>
             </div>
             <div class="col-12 col-md-6 col-lg-4">
-            </div>
-        </div>
-        <div class="row justify-content-center mt-2">
-            <div class="col-12 col-md-6 col-lg-4">
-                {{ form_row(formUser.nom) }}
-            </div>
-            <div class="col-12 col-md-6 col-lg-4">
-                {{ form_row(formUser.prenom) }}
-            </div>
-        </div>
-        <div class="row justify-content-center mt-2">
-            <div class="col-12 col-md-6 col-lg-4">
-                {{ form_row(formUser.mail) }}
-            </div>
-            <div class="col-12 col-md-6 col-lg-4">
-                {{ form_row(formUser.telephone) }}
-            </div>
-        </div>
-        <div class="row justify-content-center mt-2">
-            <div class="col-12 col-md-6 col-lg-4">
-                {{ form_row(formUser.site) }}
-            </div>
-            <div class="col-12 col-md-6 col-lg-4">
-                {{ form_row(formUser.picture) }}
-            </div>
-        </div>
-        <div class="row justify-content-center mt-2">
-            <div class="col-12 col-md-6 col-lg-4">
-                {{ form_row(formUser.password) }}
-            </div>
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="row mt-4">
-                    <div class="col">
-                        {{ form_row(formUser.publicationParSite) }}
-                    </div>
-                    <div class="col">
-                        {{ form_row(formUser.OrganisateurInscriptionDesistement) }}
-                    </div>
-                </div>
+                <strong>{{ form_row(formUser.picture) }}</strong><br><br>
+                <h5><strong>Notifications :</strong></h5><br><br>
+                <strong>{{ form_row(formUser.publicationParSite) }}</strong><br>
+                <strong>{{ form_row(formUser.OrganisateurInscriptionDesistement) }}</strong><br>
                 {% if is_granted('ROLE_ADMIN') %}
-                    <div class="row mt-4">
-                        <div class="col">
-                            {{ form_row(formUser.administrateurPublication) }}
-                        </div>
-                        <div class="col">
-                            {{ form_row(formUser.administrationModification) }}
-                        </div>
-                    </div>
+                    <strong>{{ form_row(formUser.administrateurPublication) }}</strong><br>
+                    <strong>{{ form_row(formUser.administrationModification) }}</strong><br>
                 {% endif %}
             </div>
         </div>
+    </div>
         <div class="row justify-content-center mb-4">
             <div class="col-6 col-md-4 col-lg-2 text-center">
                 <button class="btn btn-success mt-4" type="submit">Confirmer</button>
             </div>
             <div class="col-6 col-md-4 col-lg-2 text-center">
-                <a class="btn btn-light mt-4" href="{{ path('profil_detail', {'id':user.id}) }}">Annuler</a>
+                <a class="btn btn-light mt-4" href="{{ path('profil_detail', {'id':user.id}) }}"><strong>Annuler</strong></a>
             </div>
         </div>
         {{ form_end(formUser) }}
