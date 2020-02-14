@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mar. 11 fév. 2020 à 15:09
+-- Généré le :  jeu. 13 fév. 2020 à 16:23
 -- Version du serveur :  10.4.10-MariaDB
 -- Version de PHP :  7.3.12
 
@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `lieu` (
   `adresse` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_2F577D59A73F0036` (`ville_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `lieu`
@@ -71,7 +71,9 @@ CREATE TABLE IF NOT EXISTS `lieu` (
 INSERT INTO `lieu` (`id`, `ville_id`, `nom`, `adresse`) VALUES
 (1, 226, 'Levrette Cafe', '30 quai Fernand Crouan, Parc des chantiers - Pont 1 du Nantilus, 44000 Nantes'),
 (2, 226, 'L\'engrenage', '4 Allée de l\'Île Gloriette, 44000 Nantes'),
-(3, 226, 'La Bodega', '8 Rue Beauregard, 44000 Nantes');
+(3, 226, 'La Bodega', '8 Rue Beauregard, 44000 Nantes'),
+(4, 227, 'Tour Eiffel', 'Champ de Mars, 5 Avenue Anatole France, 75007 Paris'),
+(5, 1, 'Rdv en terre inconnue', '10 place de la Mairie 01190 Ozan.');
 
 -- --------------------------------------------------------
 
@@ -108,7 +110,19 @@ CREATE TABLE IF NOT EXISTS `rejoindre` (
   PRIMARY KEY (`id`),
   KEY `IDX_56E78755187326B7` (`son_utilisateur_id`),
   KEY `IDX_56E78755DB3FCCAB` (`sa_sortie_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `rejoindre`
+--
+
+INSERT INTO `rejoindre` (`id`, `son_utilisateur_id`, `sa_sortie_id`, `date_inscription`) VALUES
+(11, 10, 3, '2020-02-12 13:32:28'),
+(15, 1, 3, '2020-02-12 14:03:17'),
+(16, 1, 4, '2020-02-12 14:03:18'),
+(18, 7, 3, '2020-02-12 15:46:04'),
+(19, 7, 4, '2020-02-12 15:46:07'),
+(20, 1, 5, '2020-02-13 12:48:25');
 
 -- --------------------------------------------------------
 
@@ -158,7 +172,7 @@ CREATE TABLE IF NOT EXISTS `sortie` (
   KEY `IDX_3C3FD3F2D5E86FF` (`etat_id`),
   KEY `IDX_3C3FD3F2F6BD1646` (`site_id`),
   KEY `IDX_3C3FD3F2D936B2FA` (`organisateur_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `sortie`
@@ -167,7 +181,11 @@ CREATE TABLE IF NOT EXISTS `sortie` (
 INSERT INTO `sortie` (`id`, `lieu_id`, `etat_id`, `site_id`, `organisateur_id`, `nom`, `date_heure_debut`, `duree`, `date_limite_inscription`, `nb_inscription_max`, `commentaire`, `nb_inscrits`, `motif`) VALUES
 (1, 1, 8, 2, 7, 'Petite soirée entre potes', '2020-02-11 21:00:00', 2, '2020-02-11 20:00:00', 10, 'Soirée au bar', 0, 'Sans raison'),
 (2, 2, 7, 2, 7, 'Soirée entre filles', '2020-02-22 21:00:00', 3, '2020-02-20 21:00:00', 5, 'Soirée à l\'Engrenage', 0, NULL),
-(3, 1, 7, 2, 7, 'Ca va etre chaud', '2020-02-12 09:30:00', 1, '2020-02-11 17:30:00', 4, 'Sortie de test', 1, NULL);
+(3, 1, 9, 2, 7, 'Ca va etre chaud', '2020-02-12 09:30:00', 1, '2020-02-11 17:30:00', 4, 'Sortie de test', 4, NULL),
+(4, 1, 7, 1, 10, 'Soirée mousse', '2020-02-12 21:00:00', 2, '2020-02-12 20:00:00', 100, 'On aime pas les soirées nous ?', 2, NULL),
+(5, 3, 9, 1, 1, 'Soirée de l\'admin', '2020-02-13 16:00:00', 1, '2020-02-13 14:00:00', 1, 'Ma soirée en solo', 1, NULL),
+(6, 4, 7, 1, 1, 'Escalade', '2020-02-15 08:00:00', 2, '2020-02-14 08:00:00', 3, 'Petite montée ?', 0, NULL),
+(7, 5, 7, 1, 1, 'Ma sortie en solitaire', '2020-02-13 20:00:00', 6, '2020-02-14 10:00:00', 1, 'Qui connait ?', 0, NULL);
 
 -- --------------------------------------------------------
 
