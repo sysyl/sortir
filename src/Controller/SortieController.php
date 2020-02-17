@@ -3,21 +3,24 @@
 namespace App\Controller;
 
 use App\Entity\Etat;
+use App\Entity\Lieu;
 use App\Entity\Rejoindre;
 use App\Entity\Site;
 use App\Entity\Sortie;
 use App\Entity\Utilisateur;
 use App\Form\SortieModifierType;
 use App\Form\SortieType;
+use App\Form\LocationType;
 use App\Utils\MailerManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Swift_Mailer;
 use Swift_Message;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 
 /**
@@ -30,10 +33,10 @@ class SortieController extends AbstractController
      * @Route("/add", name="sortie_create")
      * @param EntityManagerInterface $em
      * @param Request $request
-     * @param \Swift_Mailer $mailer
+     * @param Swift_Mailer $mailer
      * @return RedirectResponse|Response
      */
-    public function add(EntityManagerInterface $em, Request $request, \Swift_Mailer $mailer)
+    public function add(EntityManagerInterface $em, Request $request, Swift_Mailer $mailer)
     {
         {
             //traiter un formulaire
@@ -147,10 +150,10 @@ class SortieController extends AbstractController
      * @param $id
      * @param Request $request
      * @param EntityManagerInterface $em
-     * @param \Swift_Mailer $mailer
+     * @param Swift_Mailer $mailer
      * @return RedirectResponse|Response
      */
-    public function edit($id, Request $request, EntityManagerInterface $em, \Swift_Mailer $mailer) {
+    public function edit($id, Request $request, EntityManagerInterface $em, Swift_Mailer $mailer) {
 
         //traiter un formulaire
         $sortie = $em->getRepository(Sortie::class)->find($id);
@@ -256,10 +259,10 @@ class SortieController extends AbstractController
      * @param $id
      * @param EntityManagerInterface $emi
      * @param Request $request
-     * @param \Swift_Mailer $mailer
+     * @param Swift_Mailer $mailer
      * @return RedirectResponse
      */
-    public function publier($id, EntityManagerInterface $emi, Request $request, \Swift_Mailer $mailer) {
+    public function publier($id, EntityManagerInterface $emi, Request $request, Swift_Mailer $mailer) {
         $sortie = $this->getDoctrine()->getRepository( Sortie::class)->find($id);
         $etat = $this->getDoctrine()->getRepository(Etat::class)->findOneBy(['libelle' => 'Publiée']);
         $referer = $request->headers->get('referer');
@@ -346,7 +349,6 @@ class SortieController extends AbstractController
             throw $this->createNotFoundException("Sortie inconnue !");
         }
 
-        dump($sortieForm);
         if($sortieForm->isSubmitted() && $sortieForm->isValid()) {
             $sortie->setEtat($etatAnnuler);
             $em->persist($sortie);
@@ -358,6 +360,33 @@ class SortieController extends AbstractController
         return $this->render("sortie/annuler.html.twig", [
             "sortie" => $sortie,
             "sortieForm" => $sortieForm->createView()
+        ]);
+    }
+
+    /**
+     * Créer un lieu
+     * @Route("/addLocation", name="add_location")
+     * @param EntityManagerInterface $em
+     * @param Request $request
+     * @return Response
+     */
+    public function addLocation(EntityManagerInterface $em, Request $request) {
+
+        // traiter le formulaire lieu
+
+        $lieu = new Lieu();
+        $formAddLocation = $this->createForm(LocationType::class, $lieu);
+        $formAddLocation->handleRequest($request);
+
+        if($formAddLocation->isSubmitted() && $formAddLocation->isValid()){
+            //sauvegarder les données dans la base
+            $em->persist($lieu);
+            $em->flush();
+            return $this->redirectToRoute("sortie_create");
+        }
+
+        return $this->render('sortie/addLocation.html.twig', [
+            'formAddLocation' => $formAddLocation->createView()
         ]);
     }
 

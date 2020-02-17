@@ -14,10 +14,15 @@
         {{ form_start(sortieForm) }}
         <div class="row justify-content-center">
             <div class="col-12 col-md-6 col-lg-4">
-                <strong>{{ form_row(sortieForm.nom) }}</strong><br>
-                <strong>{{ form_row(sortieForm.nbInscriptionMax) }}</strong><br>
-                <strong>{{ form_row(sortieForm.duree) }}</strong><br>
-                <strong>{{ form_row(sortieForm.lieu) }}</strong><br>
+                <div class="d-flex flex-column">
+                    <div class="p-2"><strong>{{ form_row(sortieForm.nom) }}</strong><br></div>
+                    <div class="p-2"><strong>{{ form_row(sortieForm.nbInscriptionMax) }}</strong><br></div>
+                    <div class="p-2"><strong>{{ form_row(sortieForm.duree) }}</strong><br></div>
+                </div>
+                <div class="d-flex flew-row">
+                    <div class="p-2"><strong>{{ form_row(sortieForm.lieu) }}</strong></div>
+                    <div class="p-2"><a href="{{ path('add_location') }}" class="fas fa-plus-circle"></a></div><br>
+                </div>
             </div>
             <div class="col-12 col-md-6 col-lg-4">
                 <strong>{{ form_row(sortieForm.dateHeureDebut) }}</strong><br>
