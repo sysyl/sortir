@@ -29,9 +29,10 @@ class AdministrationController extends AbstractController
      * @param $option
      * @param EntityManagerInterface $emi
      * @param Request $request
+     * @param UserPasswordEncoderInterface $passwordEncoder
      * @return RedirectResponse|Response
      */
-    public function admin($option, EntityManagerInterface $emi, Request $request)
+    public function admin($option, EntityManagerInterface $emi, Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
         $utilisateurs = $emi->getRepository(Utilisateur::class)->findAll();
         $villes = $emi->getRepository(Ville::class)->findAll();
@@ -62,7 +63,7 @@ class AdministrationController extends AbstractController
 
         if ($formImportFile->isSubmitted() && $formImportFile->isValid()) {
             $file = file_get_contents($formImportFile['file_csv']->getData());
-            $this->startImport($file, $emi);
+            $this->startImport($file, $emi, $passwordEncoder);
             return $this->redirectToRoute('admin', ['option' => 'Utilisateurs']);
         }
 
@@ -77,41 +78,47 @@ class AdministrationController extends AbstractController
         ]);
     }
 
-    public function startImport($file, EntityManagerInterface $em) {
+    /**
+     * Importer des utilisateurs
+     * @param $file
+     * @param EntityManagerInterface $em
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     */
+    public function startImport($file, EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder) {
+
         $csvArr = str_getcsv($file,",", "","/n");
         $chunked = array_chunk($csvArr,16);
+
         foreach ($chunked as $csvuser) {
             $user = new Utilisateur();
             if(sizeof($csvuser) == 16) {
-                try {
-                    $user->setNom($csvuser[1]); // str
-                    $user->setPrenom($csvuser[2]); //str
-                    if ($csvuser[3] == "NULL") {
-                        $user->setTelephone("");
-                    }
-                    $user->setTelephone($csvuser[3]);  //str nullable
-                    $user->setMail($csvuser[4]); //str
-                    $user->setAdmin((int)$csvuser[5]); //bool
-                    $user->setActif((int)$csvuser[6]); //bool
-                    $user->setPassword($csvuser[7]); //str
-                    $site = $em->getRepository(Site::class)->find((int) $csvuser[8]);
-                    $user->setSite($site); //int
-                    $user->setPictureFilename($csvuser[9]); //str
-                    $user->setPseudo($csvuser[10]); //str
-                    $user->setPublicationParSite((int)$csvuser[11]); //bool
-                    $user->setOrganisateurInscriptionDesistement((int)$csvuser[12]); //bool
-                    $user->setAdministrateurPublication((int)$csvuser[13]); //bool
-                    $user->setAdministrationModification((int)$csvuser[14]); //bool
-                    $user->setNotifVeilleSortie((int)$csvuser[15]); //bool
-                    $em->persist($user);
-                } catch (Exception $e) {
-                    // try catch vide lol
+                $user->setNom($csvuser[0]); // str
+                $user->setPrenom($csvuser[1]); //str
+                if ($csvuser[2] != "") {
+                    $user->setTelephone($csvuser[2]);  //str nullable
                 }
+                $user->setMail($csvuser[3]); //str
+                $user->setAdmin((int)$csvuser[4]); //bool
+                $user->setActif((int)$csvuser[5]); //bool
+                $user->setPassword($passwordEncoder->encodePassword($user,$user->getPrenom().$user->getNom())); //str
+                if ($csvuser[7] != "") {
+                    $user->setPictureFilename($csvuser[7]); //str
+                }
+                $user->setPublicationParSite((int)$csvuser[8]); //bool
+                $user->setOrganisateurInscriptionDesistement((int)$csvuser[9]); //bool
+                $user->setAdministrateurPublication((int)$csvuser[10]); //bool
+                $user->setPseudo($csvuser[11]); //str
+                $user->setAdministrationModification((int)$csvuser[12]); //bool
+                $user->setNotifVeilleSortie((int)$csvuser[13]); //bool
+                //token 14
+                $site = $em->getRepository(Site::class)->find((int) $csvuser[15]);
+                $user->setSite($site); //int
+                $em->persist($user);
             }
-
         }
         $em->flush();
     }
+
 
     /**
      * Créer un utilisateur
