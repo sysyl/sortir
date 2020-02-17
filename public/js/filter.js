@@ -55,36 +55,20 @@ function displaySearchByDate() {
     let dateDebut = document.getElementById("inputGroup_dateDebut").value;
     let dateFin = document.getElementById("inputGroup_dateFin").value;
 
-    console.log("date formulaire");
-    console.log(dateDebut);
-    console.log(dateFin);
-
-    console.log("date formulaire passée en JS");
     let dateDebutVal =  new Date(dateDebut);
     let dateFinVal = new Date(dateFin);
-
-    console.log(dateDebutVal);
-    console.log(dateFinVal);
-
         if ((dateDebutVal instanceof Date) && (dateFinVal instanceof Date)) {
             filteredTrs = filteredTrs.map((tr) => {
-                tr.style.display = 'table-row';
-                let rawDate = tr.children[1].textContent.split(" ")[0]; //get all date from list
-                let splitDate = rawDate.split('/'); //array and delete '/'
-                let formatDate = `${splitDate[2]}-${splitDate[1]}-${splitDate[0]}`; // add '-' and create the new format // At this time, form date and dates of the list are the same format
+                tr.style.display = 'table-row'; // get all data
+                let rawDate = tr.children[1].textContent.split(" ")[0]; // get all date from table row
+                let splitDate = rawDate.split('/'); //new array and delete '/'
+                let formatDate = `${splitDate[2]}-${splitDate[1]}-${splitDate[0]}`; // add '-' and create the new format. At this time, form date and dates of the tr are the same format
                 let dateFromTr =  new Date(formatDate);
-                console.log(dateFromTr);
-                // TODO
-                if (dateFromTr.getTime() >= dateDebutVal.getTime() && dateFromTr.getTime() <= dateFinVal.getTime()) {
-                    tr.style.display = 'table-row';
+                if (dateFromTr.getDate() >= dateDebutVal.getDate() && dateFromTr.getDate() <= dateFinVal.getDate()) { //compare tr dates and form dates
+                    tr.style.display = 'table-row'; // new filter
                 } else {
-                    tr.style.display = 'none';
+                    tr.style.display = 'none'; // or not
                 }
-                return tr;
-            });
-        } else {
-            filteredTrs = filteredTrs.map((tr) => {
-                tr.style.display = 'table-row';
                 return tr;
             });
         }
