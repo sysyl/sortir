@@ -267,5 +267,28 @@ class SortieController extends AbstractController
             'formAddLocation' => $formAddLocation->createView()
         ]);
     }
+    /**
+     * Annuler une sortie
+     * @Route("/archive/{id}", name="sortie_archiver")
+     * @param EntityManagerInterface $em
+     * @param $id
+     * @return RedirectResponse|Response
+     */
+    public function archiver(EntityManagerInterface $em, $id)
+    {
+
+        //recuperer la fiche de la sortie dans la base de données
+        $sortie = $em->getRepository(Sortie::class)->find($id);
+        $etatAnnuler = $this->getDoctrine()->getRepository(Etat::class)->findOneBy(['libelle' => 'Archivée']);
+
+        if ($sortie == null) {
+            throw $this->createNotFoundException("Sortie inconnue !");
+        }
+            $sortie->setEtat($etatAnnuler);
+            $em->persist($sortie);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add('success', 'Sortie Archivé !');
+            return $this->redirectToRoute('liste_sorties');
+    }
 
 }

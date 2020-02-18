@@ -1,5 +1,4 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}{{ parent() }} | Les sorties{% endblock %}
 
 {% block body %}
@@ -339,7 +338,9 @@
 
                             <tr class="table-secondary">
                                 <td>{{ sortie.nom }}</td>
-                                <td>{{ sortie.dateHeureDebut | date('d/m/Y h:i') }}</td>
+
+
+                                <td id="dateSortieArchiver">{{ sortie.dateHeureDebut | date('d/m/Y h:i') }}</td>
                                 <td>{{ sortie.lieu.ville.nom }}</td>
                                 <td>{{ sortie.nbInscrits }} / {{ sortie.nbInscriptionMax }}</td>
                                 <td class="text-center">
@@ -351,7 +352,9 @@
                                 </td>
                                 <td><a href="{{ path('profil_detail',{'id':sortie.organisateur.id}) }}">{{ sortie.organisateur.pseudo }}</a></td>
                                 <td>
-                                    <a href="{{ path('sortie_detail',{'id':sortie.id}) }}">Afficher</a>
+
+                                    <a id="Afficher"  href="{{ path('sortie_detail',{'id':sortie.id}) }}">Afficher</a>
+
                                 </td>
                                 <td>{{ sortie.etat.libelle }}</td>
                             </tr>
