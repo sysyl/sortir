@@ -2,45 +2,18 @@
 
 namespace App\Controller;
 
-use App\Entity\Sortie;
 use App\Entity\Utilisateur;
 use App\Form\MotPasseOublieType;
-use App\Form\SortieModifierType;
 use Doctrine\ORM\EntityManagerInterface;
-use Swift_Mailer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
-
-//    /**
-//     * @Route("/login", name="login")
-//     * @param Request $request
-//     * @param AuthenticationUtils $authenticationUtils
-//     * @return Response
-//     */
-//    public function login(Request $request, AuthenticationUtils $authenticationUtils): Response
-//    {
-//         if ($this->getUser()) {
-//             return $this->redirectToRoute('liste_sorties');
-//         }
-//
-//        // get the login error if there is one
-//        $error = $authenticationUtils->getLastAuthenticationError();
-//        // last username entered by the user
-//        $lastUsername = $authenticationUtils->getLastUsername();
-//
-//        return $this->render('security/login.html.twig', [
-//            'last_username' => $lastUsername,
-//            'error' => $error
-//        ]);
-//    }
 
     /**
      * @Route("/logout", name="logout")
@@ -55,15 +28,13 @@ class SecurityController extends AbstractController
      * @Route("/mdp_oublie", name="mdp_oublie")
      * @param Request $request
      * @param EntityManagerInterface $em
-     * @param Swift_Mailer $mailer
      * @return Response
      * @throws \Exception
      */
-    public function mdp_oublie(Request $request, EntityManagerInterface $em, Swift_Mailer $mailer)
+    public function mdp_oublie(Request $request, EntityManagerInterface $em)
     {
 
         $mail = $request->request->get('mail_mdp_oublie');
-
 
         if ($mail !== null) {
 
@@ -83,17 +54,6 @@ class SecurityController extends AbstractController
             $em->persist($utilisateur);
             $em->flush();
 
-            $message = (new \Swift_Message('sortir.com | Mot de Passe oublié'))
-                ->setFrom('noreply@sortir.com')
-                ->setTo($mail)
-                ->setBody(
-                    $this->renderView(
-                        'emails/mot_de_oublie.html.twig',
-                        ['utilisateur' => $utilisateur]
-                    ),
-                    'text/html'
-                );
-            $mailer->send($message);
         }
         return $this->render('security/mdp_oublie.html.twig');
     }

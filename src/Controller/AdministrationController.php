@@ -2,9 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Lieu;
 use App\Entity\Site;
-use App\Entity\Sortie;
 use App\Entity\Utilisateur;
 use App\Entity\Ville;
 use App\Form\ImportUsersType;
@@ -12,14 +10,12 @@ use App\Form\SiteType;
 use App\Form\UpdateUtilisateurType;
 use App\Form\VilleType;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-
 
 
 class AdministrationController extends AbstractController

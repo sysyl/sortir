@@ -5,22 +5,17 @@ namespace App\Controller;
 use App\Entity\Etat;
 use App\Entity\Lieu;
 use App\Entity\Rejoindre;
-use App\Entity\Site;
 use App\Entity\Sortie;
 use App\Entity\Utilisateur;
 use App\Form\SortieModifierType;
 use App\Form\SortieType;
 use App\Form\LocationType;
-use App\Utils\MailerManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Swift_Mailer;
-use Swift_Message;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 
 /**
@@ -33,10 +28,9 @@ class SortieController extends AbstractController
      * @Route("/add", name="sortie_create")
      * @param EntityManagerInterface $em
      * @param Request $request
-     * @param Swift_Mailer $mailer
      * @return RedirectResponse|Response
      */
-    public function add(EntityManagerInterface $em, Request $request, Swift_Mailer $mailer)
+    public function add(EntityManagerInterface $em, Request $request)
     {
         {
             //traiter un formulaire
@@ -52,49 +46,6 @@ class SortieController extends AbstractController
                 else{
                     $etat = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'Publiée']);
                     $this->addFlash('success', "La sortie a été ajoutée !");
-
-                    //Envoie un mail à tous les administrateurs lorsqu'il y a une nouvelle publication
-                    $lesAdmins = $em->getRepository(Utilisateur::class)->findBy(['admin' => 1]);
-                    $lesMailsAdmins = [];
-                    foreach ($lesAdmins as $admin) {
-                        if($admin->getAdministrateurPublication() === true) {
-                            array_push($lesMailsAdmins, $admin->getMail());
-                        }
-                    }
-                    $message = (new Swift_Message('sortir.com | Nouvelle publication'))
-                        ->setFrom('noreply@sortir.com')
-                        ->setTo($lesMailsAdmins)
-                        ->setBody(
-                            $this->renderView(
-                                'emails/publication_utilisateur.html.twig',
-                                ['sortie' => $sortie,
-                                'utilisateur' => $this->getUser()]
-                            ),
-                            'text/html'
-                        );
-                    $mailer->send($message);
-
-                    //Envoie un mail à tous les utilisateurs qui ont le même site que user
-                    $userSite = $this->getUser()->getSite();
-                    $users = $em->getRepository(Utilisateur::class)->findBy(['site' => $userSite]);
-                    $lesMailsUserSite = [];
-                    foreach ($users as $user) {
-                        if($admin->getAdministrateurPublication() === true) {
-                            array_push($lesMailsUserSite, $admin->getMail());
-                        }
-                    }
-                    $message = (new Swift_Message('sortir.com | (Admin) Nouvelle publication'))
-                        ->setFrom('noreply@sortir.com')
-                        ->setTo($lesMailsUserSite)
-                        ->setBody(
-                            $this->renderView(
-                                'emails/publication_utilisateur.html.twig',
-                                ['sortie' => $sortie,
-                                    'utilisateur' => $this->getUser()]
-                            ),
-                            'text/html'
-                        );
-                    $mailer->send($message);
                 }
 
                 $organisateur = $em->getRepository(Utilisateur::class)->find($this->getUser()->getId());
@@ -150,10 +101,9 @@ class SortieController extends AbstractController
      * @param $id
      * @param Request $request
      * @param EntityManagerInterface $em
-     * @param Swift_Mailer $mailer
      * @return RedirectResponse|Response
      */
-    public function edit($id, Request $request, EntityManagerInterface $em, Swift_Mailer $mailer) {
+    public function edit($id, Request $request, EntityManagerInterface $em) {
 
         //traiter un formulaire
         $sortie = $em->getRepository(Sortie::class)->find($id);
@@ -172,31 +122,6 @@ class SortieController extends AbstractController
             $em->persist($sortie);
             $em->flush();
             $this->addFlash('success', "La sortie a été modifié");
-
-
-            //Envoie un mail à tous les administrateurs lorsqu'il y a une nouvelle publication
-            $lesAdmins = $em->getRepository(Utilisateur::class)->findBy(['admin' => 1]);
-            $lesMailsAdmins = [];
-
-            foreach ($lesAdmins as $admin) {
-                // La notificationde choisir ou non de recevoir les modifications des publications
-                if($admin->getAdministrationModification() === true) {
-                    array_push($lesMailsAdmins, $admin->getMail());
-                }
-            }
-            $message = (new Swift_Message('sortir.com | Modification sortie'))
-                ->setFrom('noreply@sortir.com')
-                ->setTo($lesMailsAdmins)
-                ->setBody(
-                    $this->renderView(
-                        'emails/administration_modification.html.twig',
-                        ['sortie' => $sortie,
-                            'utilisateur' => $this->getUser()]
-                    ),
-                    'text/html'
-                );
-            $mailer->send($message);
-
 
             return $this->redirectToRoute("sortie_detail",
                 ['id' => $sortie->getId()]);
@@ -259,10 +184,9 @@ class SortieController extends AbstractController
      * @param $id
      * @param EntityManagerInterface $emi
      * @param Request $request
-     * @param Swift_Mailer $mailer
      * @return RedirectResponse
      */
-    public function publier($id, EntityManagerInterface $emi, Request $request, Swift_Mailer $mailer) {
+    public function publier($id, EntityManagerInterface $emi, Request $request) {
         $sortie = $this->getDoctrine()->getRepository( Sortie::class)->find($id);
         $etat = $this->getDoctrine()->getRepository(Etat::class)->findOneBy(['libelle' => 'Publiée']);
         $referer = $request->headers->get('referer');
@@ -273,57 +197,11 @@ class SortieController extends AbstractController
             $emi->persist($sortie);
             $emi->flush();
 
-            //Envoie un mail à tous les administrateurs lorsqu'il y a une nouvelle publication
-            $lesAdmins = $emi->getRepository(Utilisateur::class)->findBy(['admin' => 1]);
-            $lesMailsAdmins = [];
-
-            foreach ($lesAdmins as $admin) {
-                // La notification de choisir ou non de recevoir les publications
-                if($admin->getAdministrateurPublication() === true) {
-                    array_push($lesMailsAdmins, $admin->getMail());
-                }
-            }
-            $message = (new Swift_Message('sortir.com | (Admin) Nouvelle publication'))
-                ->setFrom('noreply@sortir.com')
-                ->setTo($lesMailsAdmins)
-                ->setBody(
-                    $this->renderView(
-                        'emails/publication_utilisateur.html.twig',
-                        ['sortie' => $sortie,
-                            'utilisateur' => $this->getUser()]
-                    ),
-                    'text/html'
-                );
-            $mailer->send($message);
-
-            //Envoie un mail à tous les utilisateurs qui ont le même site que user
-            $userSite = $this->getUser()->getSite();
-            $users = $emi->getRepository(Utilisateur::class)->findBy(['site' => $userSite]);
-            $lesMailsUserSite = [];
-            foreach ($users as $user) {
-                // La notification de choisir ou non de recevoir les publications
-                if($user->getPublicationParSite() === true) {
-                    array_push($lesMailsUserSite, $user->getMail());
-                }
-            }
-            $message = (new Swift_Message('sortir.com | Nouvelle publication dans votre Site'))
-                ->setFrom('noreply@sortir.com')
-                ->setTo($lesMailsUserSite)
-                ->setBody(
-                    $this->renderView(
-                        'emails/publication_utilisateur.html.twig',
-                        ['sortie' => $sortie,
-                            'utilisateur' => $this->getUser()]
-                    ),
-                    'text/html'
-                );
-            $mailer->send($message);
-
             $this->get('session')->getFlashBag()->add('success', 'Sortie publiée !');
             return $this->redirect($referer);
 
         }
-//        return $this->redirect($referer);
+
     }
 
     /**

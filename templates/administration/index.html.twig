@@ -120,7 +120,6 @@
                                             <td>{{ ville.codePostal }}</td>
                                             <td>
                                                 <a href="{{ path('ville_edit', {'id':ville.id}) }}">Modifier</a>
-    {#                                            <a href="{{ path('ville_delete', {'id':ville.id}) }}">- Supprimer</a>#}
                                             </td>
                                         </tr>
                                     {% endfor %}
@@ -184,7 +183,7 @@
         </div>
 {% endblock %}
 
-            {% block javascripts %}
-                {{ parent() }}
-                <script rel="script/javascript" src="{{ asset('js/admin.js') }}"></script>
-            {% endblock %}
+{% block javascripts %}
+{{ parent() }}
+<script rel="script/javascript" src="{{ asset('js/admin.js') }}"></script>
+{% endblock %}

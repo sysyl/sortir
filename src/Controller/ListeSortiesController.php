@@ -6,14 +6,12 @@ use App\Entity\Etat;
 use App\Entity\Rejoindre;
 use App\Entity\Site;
 use App\Entity\Sortie;
-use App\Entity\Utilisateur;
 use App\Entity\Ville;
 use App\Form\SiteType;
 use App\Form\VilleType;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use phpDocumentor\Reflection\Types\Integer;
-use Swift_Mailer;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -75,11 +73,10 @@ class ListeSortiesController extends AbstractController
      * @param EntityManagerInterface $emi
      * @param Sortie $sortie
      * @param Request $request
-     * @param Swift_Mailer $mailer
      * @return RedirectResponse
-     * @throws \Exception
+     * @throws Exception
      */
-    public function rejoindre(EntityManagerInterface $emi, Sortie $sortie, Request $request, Swift_Mailer $mailer)
+    public function rejoindre(EntityManagerInterface $emi, Sortie $sortie, Request $request)
     {
         $referer = $request->headers->get('referer');
 
@@ -110,31 +107,6 @@ class ListeSortiesController extends AbstractController
 
         $this->get('session')->getFlashBag()->add('success', "Vous vous êtes inscrit à cette sortie !");
 
-        //Envoie un mail à tous les organisateurs de sa sortie lorsqu'il y a une inscription
-
-        $organisateur  = $this->getDoctrine()->getRepository(Utilisateur::class)->findOneBy(['id' => $sortie->getOrganisateur()->getId()]);
-
-        // Mail de l'organisateur
-        $mailOrganisateur = $organisateur->getMail();
-
-        // La notification de choisir ou non de recevoir les personnes qui ne sont inscrits à la sortie de l'organisateur
-        $notificationOrganisateur = $organisateur->getOrganisateurInscriptionDesistement();
-
-        // Si l'organisateur a choisi de recevoir les notifications connernent ses sorties
-        if($notificationOrganisateur === true) {
-            $message = (new \Swift_Message('sortir.com | Inscription'))
-                ->setFrom('noreply@sortir.com')
-                ->setTo($mailOrganisateur)
-                ->setBody(
-                    $this->renderView(
-                        'emails/inscription_sortie.html.twig',
-                        ['sortie' => $sortie,
-                            'utilisateur' => $this->getUser()]
-                    ),
-                    'text/html'
-                );
-            $mailer->send($message);
-        }
         return $this->redirect($referer);
     }
 
@@ -144,10 +116,9 @@ class ListeSortiesController extends AbstractController
      * @param Request $request
      * @param EntityManagerInterface $emi
      * @param Sortie $sortie
-     * @param Swift_Mailer $mailer
      * @return RedirectResponse
      */
-    public function desister(Request $request, EntityManagerInterface $emi, Sortie $sortie, Swift_Mailer $mailer)
+    public function desister(Request $request, EntityManagerInterface $emi, Sortie $sortie)
     {
         $referer = $request->headers->get('referer');
 
@@ -166,30 +137,6 @@ class ListeSortiesController extends AbstractController
             $emi->remove($sortieRepo);
             $emi->flush();
 
-            //Envoie un mail à tous les organisateurs de sa sortie lorsqu'il y a un désistement
-
-            $organisateur  = $this->getDoctrine()->getRepository(Utilisateur::class)->findOneBy(['id' => $sortie->getOrganisateur()->getId()]);
-
-            $mailOrganisateur = $organisateur->getMail();
-
-            // La notification de choisir ou non de recevoir les personnes qui ne sont désister à la sortie de l'organisateur
-            $notificationOrganisateur = $organisateur->getOrganisateurInscriptionDesistement();
-
-            // Si l'organisateur a choisi de recevoir les notifications connernent ses sorties
-            if($notificationOrganisateur === true) {
-            $message = (new \Swift_Message('sortir.com | Désistement'))
-                ->setFrom('noreply@sortir.compu')
-                ->setTo($mailOrganisateur)
-                ->setBody(
-                    $this->renderView(
-                        'emails/desistement_sortie.html.twig',
-                        ['sortie' => $sortie,
-                            'utilisateur' => $this->getUser()]
-                    ),
-                    'text/html'
-                );
-            $mailer->send($message);
-            }
             $this->get('session')->getFlashBag()->add('success', "Vous vous êtes désisté de la sortie");
             return $this->redirect($referer);
         }
@@ -279,10 +226,9 @@ class ListeSortiesController extends AbstractController
      * @param $id
      * @param Request $request
      * @param EntityManagerInterface $em
-     * @param Swift_Mailer $mailer
      * @return RedirectResponse|Response
      */
-    public function editVille($id, Request $request, EntityManagerInterface $em, Swift_Mailer $mailer) {
+    public function editVille($id, Request $request, EntityManagerInterface $em) {
 
         //traiter un formulaire
         $ville = $em->getRepository(Ville::class)->find($id);
@@ -311,10 +257,9 @@ class ListeSortiesController extends AbstractController
      * @param $id
      * @param Request $request
      * @param EntityManagerInterface $em
-     * @param Swift_Mailer $mailer
      * @return RedirectResponse|Response
      */
-    public function editSite($id, Request $request, EntityManagerInterface $em, Swift_Mailer $mailer) {
+    public function editSite($id, Request $request, EntityManagerInterface $em) {
 
         //traiter un formulaire
         $site = $em->getRepository(Site::class)->find($id);
