@@ -86,6 +86,8 @@ class AdministrationController extends AbstractController
      */
     public function startImport($file, EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder) {
 
+        //TODO verification on file
+
         $csvArr = str_getcsv($file,",", "","/n");
         $chunked = array_chunk($csvArr,16);
 

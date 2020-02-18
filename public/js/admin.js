@@ -1,3 +1,4 @@
+// query selector to get element
 document.addEventListener('DOMContentLoaded', () =>{
     const userSearchBar = document.querySelector("#searchUser");
     const villeSearchBar = document.querySelector("#searchVille");
@@ -8,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () =>{
         const tabsArr = [...children];
         const activeTab = tabsArr.filter((tab) => {
             return tab.classList.contains("active");
-        })[0];
+        })[0]; // get active element
         const { value } = evt.currentTarget;
         const { children: rowHTMLElements } = document.querySelector("#v-pills-utilisateurs  tbody");
         const rowArr = [...rowHTMLElements];
@@ -32,17 +33,21 @@ document.addEventListener('DOMContentLoaded', () =>{
         const tabsArr = [...children];
         const activeTab = tabsArr.filter((tab) => {
             return tab.classList.contains("active");
-        })[0];
+        })[1];
         const { value } = evt.currentTarget;
         const { children: rowHTMLElements } = document.querySelector("#v-pills-villes  tbody");
         const rowArr = [...rowHTMLElements];
         if (activeTab.textContent === "Villes") {
             rowArr.forEach( row => {
                 row.style.display = 'table-row';
-                const rowUserVal = row.children[0].innerText;
-                rowUserVal.toLowerCase().includes(value.toLowerCase())
-                    ? row.style.display = 'table-row'
-                    : row.style.display = 'none';
+                const rowCityVal = row.children[1].innerText;
+                console.log(rowCityVal);
+                if (rowCityVal.toLowerCase().includes(value.toLowerCase())) {
+                    row.style.display = 'table-row'
+                }
+                else {
+                    row.style.display = 'none';
+                }
             });
         }
     });
@@ -52,28 +57,21 @@ document.addEventListener('DOMContentLoaded', () =>{
         const tabsArr = [...children];
         const activeTab = tabsArr.filter((tab) => {
             return tab.classList.contains("active");
-        })[0];
+        })[2];
         const { value } = evt.currentTarget;
         const { children: rowHTMLElements } = document.querySelector("#v-pills-sites  tbody");
         const rowArr = [...rowHTMLElements];
         if (activeTab.textContent === "Sites") {
             rowArr.forEach( row => {
                 row.style.display = 'table-row';
-                const rowUserVal = row.children[0].innerText;
-                rowUserVal.toLowerCase().includes(value.toLowerCase())
-                    ? row.style.display = 'table-row'
-                    : row.style.display = 'none';
+                const rowSiteVal = row.children[2].innerText;
+                if (rowSiteVal.toLowerCase().includes(value.toLowerCase())) {
+                    row.style.display = 'table-row'
+                }
+                else {
+                    row.style.display = 'none';
+                }
             });
-        }
-    });
-
-    const csvInput = document.querySelector("#import_users_file_csv");
-    const csvLabel = document.querySelector(".custom-file-label");
-    csvInput.addEventListener('change', evt => {
-        const { value } = evt.currentTarget;
-        if (value) {
-            const fileName = value.split("\\").pop() || value.split("/").pop();
-            csvLabel.innerHTML = fileName;
         }
     });
 
