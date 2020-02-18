@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Utilisateur;
 use App\Form\MotPasseOublieType;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +21,7 @@ class SecurityController extends AbstractController
      */
     public function logout()
     {
-        throw new \Exception('This method can be blank - it will be intercepted by the logout key on your firewall');
+        throw new Exception('This method can be blank - it will be intercepted by the logout key on your firewall');
     }
 
     /**
@@ -28,10 +29,11 @@ class SecurityController extends AbstractController
      * @Route("/mdp_oublie", name="mdp_oublie")
      * @param Request $request
      * @param EntityManagerInterface $em
+     * @param UserPasswordEncoderInterface $passwordEncoder
      * @return Response
-     * @throws \Exception
+     * @throws Exception
      */
-    public function mdp_oublie(Request $request, EntityManagerInterface $em)
+    public function mdp_oublie(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder)
     {
 
         $mail = $request->request->get('mail_mdp_oublie');
@@ -45,10 +47,9 @@ class SecurityController extends AbstractController
                 throw $this->createNotFoundException('Utilisateur nas pas été trouvé');
             }
 
-            $utilisateur->setPassword($utilisateur->getPrenom() . $utilisateur->getNom());
+            $utilisateur->setPassword($passwordEncoder->encodePassword($utilisateur,$utilisateur->getPrenom().$utilisateur->getNom()));
 
             $token = sha1(random_bytes(32));
-
             $utilisateur->setToken($token);
 
             $em->persist($utilisateur);
@@ -56,49 +57,6 @@ class SecurityController extends AbstractController
 
         }
         return $this->render('security/mdp_oublie.html.twig');
-    }
-
-    /**
-     * Mot de passe oublié utilisateur 2
-     * @Route("/{id}/mdp_oublie_changer", name="mdp_oublie_changer", requirements={"id"="\d+"})
-     * @param $id
-     * @param Request $request
-     * @param EntityManagerInterface $em
-     * @param UserPasswordEncoderInterface $passwordEncoder
-     * @return RedirectResponse|Response
-     */
-    public function mdp_oublie_changer($id, Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder)
-    {
-
-        //traiter un formulaire
-        $utilisateur = $em->getRepository(Utilisateur::class)->find($id);
-        $MotDePasseForm = $this->createForm(MotPasseOublieType::class, $utilisateur);
-        $MotDePasseForm->handleRequest($request);
-
-        $token = $request->query->get('token');
-
-        if ($utilisateur->getToken() == $token) {
-            if ($MotDePasseForm->isSubmitted() && $MotDePasseForm->isValid()) {
-                $utilisateur->setPassword(
-                    $passwordEncoder->encodePassword(
-                        $utilisateur,
-                        $utilisateur->getPassword()
-                    )
-                );
-                $utilisateur->setToken(null);
-                $em->persist($utilisateur);
-                $em->flush();
-                $this->addFlash('success', "Votre mot de passe a été modifié");
-                return $this->redirectToRoute('app_login',['last_username'=>$utilisateur->getMail()]);
-            }
-        } else {
-            return $this->redirectToRoute('app_login');
-        }
-
-        return $this->render("profil/modification_mdp.html.twig", [
-            'MotDePasseForm' => $MotDePasseForm->createView(),
-            'utilisateur' => $utilisateur
-        ]);
     }
 
 }
