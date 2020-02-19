@@ -12,6 +12,7 @@ use App\Form\VilleType;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use PhpParser\Node\Stmt\Foreach_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,31 +25,68 @@ class ListeSortiesController extends AbstractController
      * @Route("/liste_sorties", name="liste_sorties")
      * @param EntityManagerInterface $emi
      * @return Response
+     * @throws Exception
      */
     public function index(EntityManagerInterface $emi)
     {
+
         // LES ETATS
-        $etatCreee = $emi->getRepository( Etat::class)->findOneBy(['libelle' => 'Brouillon']);
-        $etatPubliee = $emi->getRepository( Etat::class)->findOneBy(['libelle' => 'Publiée']);
+        $etatCree = $emi->getRepository( Etat::class)->findOneBy(['libelle' => 'Brouillon']);
+        $etatPublie = $emi->getRepository( Etat::class)->findOneBy(['libelle' => 'Publiée']);
         $etatAnnule = $emi->getRepository( Etat::class)->findOneBy(['libelle' => 'Annulée']);
         $etatCloture = $emi->getRepository( Etat::class)->findOneBy(['libelle' => 'Clôturée']);
         $etatEncours = $emi->getRepository( Etat::class)->findOneBy(['libelle' => 'En cours']);
-        $etatTerminee = $emi->getRepository( Etat::class)->findOneBy(['libelle' => 'Terminée']);
+        $etatTermine = $emi->getRepository( Etat::class)->findOneBy(['libelle' => 'Terminée']);
         $etatArchive = $emi->getRepository( Etat::class)->findOneBy(['libelle' => 'Archivée']);
 
         // TOUTE LES VILLES
         $villes = $emi->getRepository(Ville::class)->findAll();
 
         // LES REQUETES DE RECUPERATIONS DES SORTIES EN FONCTION DE L'ETAT
-        $sortiesPubliees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatPubliee]);
-        $sortiesCreees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatCreee, 'organisateur' => $this->getUser()]);
+        $sortiesPubliees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatPublie]);
+        $sortiesCreees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatCree, 'organisateur' => $this->getUser()]);
         $sortiesAnnulees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatAnnule]);
         $sortiesCloturees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatCloture]);
         $sortiesEncours = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatEncours]);
-        $sortiesTerminees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatTerminee]);
+        $sortiesTerminees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatTermine]);
         $sortiesArchivees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatArchive]);
 
-        $sortiesPhone = $emi->getRepository(Sortie::class)->findBy(['etat' => [$etatCreee, $etatPubliee, $etatCloture, $etatEncours, $etatTerminee], 'site' => $this->getUser()->getSite()]);
+//        //LES DATES
+        $localDate = new DateTime("now");
+        foreach ($sortiesAnnulees as $laSortieAnnulee) {
+            $interval = date_diff($laSortieAnnulee->getDateHeureDebut(), $localDate);
+
+            if($interval->format('%R%a') >= '+30'){
+
+                $laSortieAnnulee->setEtat($etatArchive);
+                $emi->persist($laSortieAnnulee);
+                $emi->flush();
+            }
+        }
+        foreach ($sortiesCloturees as $laSortieCloturee) {
+
+            $interval = date_diff($laSortieCloturee->getDateHeureDebut(), $localDate);
+
+            if($interval->format('%R%a') >= '+30'){
+                $laSortieCloturee->setEtat($etatArchive);
+                $var = $interval->format('%R%a');
+                $emi->persist($laSortieCloturee);
+                $emi->flush();
+            }
+        }
+        foreach ($sortiesTerminees as $laSortieTerminee) {
+
+            $interval = date_diff($laSortieTerminee->getDateHeureDebut(), $localDate);
+
+          if($interval->format('%R%a') >= '+30'){
+              $laSortieTerminee->setEtat($etatArchive);
+              $var = $interval->format('%R%a');
+              $emi->persist($laSortieTerminee);
+              $emi->flush();
+            }
+        }
+
+        $sortiesPhone = $emi->getRepository(Sortie::class)->findBy(['etat' => [$etatCree, $etatPublie, $etatCloture, $etatEncours, $etatTermine], 'site' => $this->getUser()->getSite()]);
 
         $rejoindres = $emi->getRepository(Rejoindre::class)->findBy(['sonUtilisateur' => $this->getUser()]);
 

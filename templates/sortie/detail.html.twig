@@ -1,4 +1,3 @@
-{#
 {% extends 'base.html.twig' %}
 
 {% block title %}{{ parent() }} | Détail sortie{% endblock %}
@@ -32,203 +31,7 @@
                     {% elseif sortie.etat.libelle == 'Terminée' %}
                         <span class="text-success"><b>Terminée</b></span>
                     {% elseif sortie.etat.libelle == 'Archivée' %}
-                        <span>Archivée</span>
-                    {% endif %}
-                </p>
-            </div>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-12 col-lg-4">
-                <div class="row mt-3">
-                    <div class="col-5">Nom :</div>
-                    <div class="col"><b>{{ sortie.nom }}</b></div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-5">Date et heure de la sortie :</div>
-                    <div class="col">{{ sortie.dateHeureDebut | date('d/m/Y H:i') }}</div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-5">Date limite inscription :</div>
-                    <div class="col">{{ sortie.dateLimiteInscription | date('d/m/Y H:i') }}</div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-5">Nb de places total :</div>
-                    <div class="col">{{ sortie.nbInscriptionMax }}</div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-5">Durée :</div>
-                    <div class="col">{{ sortie.duree }} minutes</div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-5">Description et infos :</div>
-                    <div class="col">{{ sortie.commentaire }}</div>
-                </div>
-            </div>
-            <div class="col-12 col-lg-4">
-                <div class="row mt-3">
-                    <div class="col-5">Organisateur :</div>
-                    <div class="col"><a href="{{ path('profil_detail', {'id':sortie.organisateur.id}) }}">{{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom }}</a></div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-5">Ville :</div>
-                    <div class="col">{{ sortie.lieu.ville.nom }} - {{ sortie.lieu.ville.codePostal }}</div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-5">Lieu :</div>
-                    <div class="col">{{ sortie.lieu.nom }}</div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-5">Adresse :</div>
-                    <div class="col">{{ sortie.lieu.adresse }}</div>
-                </div>
-            </div>
-        </div>
-
-        {% if app.user.id == sortie.organisateur.id  %}
-            <div class="row mt-4">
-                <div class="col text-center">
-                    <form method="POST" action="{{ path("sortie_delete", {'id' : sortie.id }) }}" onsubmit="return confirm('Confirmation de la suppression ?');">
-                        {% if sortie.etat.libelle == 'Brouillon' %}
-                        <a class="btn btn-outline-primary" href="{{ path("sortie_edit", {'id' : sortie.id}) }}">Modifier</a>
-                        {% endif %}
-                        {% if sortie.etat.libelle == 'Brouillon' %}
-                            <a class="btn btn-success" href="{{ path('sortie_publier',{'id':sortie.id}) }}">Publier la sortie</a>
-                            <input type="hidden" name="_method" value="DELETE">
-                            <input type="hidden" name="_token" value="{{ csrf_token('delete'~sortie.id) }}">
-                            <button class="btn btn-outline-danger" type="submit">Supprimer</button>
-                        {% endif %}
-
-                        {% if sortie.etat.libelle == 'Publiée' or sortie.etat.libelle == 'Clôturée' %}
-                            <a class="btn btn-outline-danger" href="{{ path('sortie_annuler',{'id':sortie.id}) }}">Annuler</a>
-                        {% endif %}
-                        {% if is_granted('ROLE_ADMIN') and (sortie.etat.libelle == 'Annulée' or sortie.etat.libelle == 'Terminée') %}
-                            <a class="btn btn-primary" href="">Archiver</a>
-                        {% endif %}
-                    </form>
-                </div>
-            </div>
-        {% endif %}
-
-        <hr>
-
-        <div class="row">
-
-            {% if rejoindres|length > 0 %}
-
-                <div class="col-lg-4">
-                    <h5 class="mb-2">Liste des presonnes inscrites</h5>
-
-
-
-
-                    <hr>
-
-                    <table class="table table-striped">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th>Pseudo</th>
-                                <th>Date inscription</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                            {% for rejoindre in rejoindres %}
-                                <tr>
-                                    <td><a href="{{ path('profil_detail',{'id':rejoindre.sonUtilisateur.id}) }}">{{ rejoindre.sonUtilisateur.pseudo }}</a></td>
-                                    <td>{{ rejoindre.dateInscription | date('d/m/Y H:i') }}</td>
-                                </tr>
-                            {% endfor %}
-
-                        </tbody>
-                    </table>
-                </div>
-
-            {% else %}
-
-                <div class="col-lg-4">
-                    <h5 class="mb-2">Liste des presonnes inscrites</h5>
-                    <hr>
-                    <p>Il n'y a personnes d'inscrit pour le moment...</p>
-                </div>
-
-                <div class="col">
-
-                    {% if sortie.etat.libelle == "Publiée" or sortie.etat.libelle == "Clôturée" %}
-
-                        {% set jeSuisInscrit = false %}
-                        {% for rejoindre in rejoindres %}
-                            {% if not jeSuisInscrit %}
-                                {% if rejoindre.sonUtilisateur.id == app.user.id %}
-                                    {% set jeSuisInscrit = true %}
-                                {% endif %}
-                            {% endif %}
-                        {% endfor %}
-
-                        {% if jeSuisInscrit %}
-                            <a class="btn btn-outline-secondary" href="{{ path('desister_sortie',{'id':sortie.id}) }}">Se désister</a>
-                            <br>
-
-                        {% else %}
-                            <a class="btn btn-outline-primary" href="{{ path('rejoindre_sortie',{'id':sortie.id}) }}">S'inscrire</a>
-                            <br>
-                        {% endif %}
-
-                    {% endif %}
-
-                </div>
-
-            {% endif %}
-
-            <div class="col" style="border-left:1px solid #E0E0E0;height:500px"></div>
-
-            #}
-{#        API GOOGLE MAP#}{#
-
-            <iframe class="col" width="100%" height="400" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q={{ sortie.lieu.adresse }}&amp;ie=UTF8&amp;&amp;output=embed"></iframe>
-
-        </div>
-
-    </div>
-
-{% endblock %}#}
-
-
-
-
-{% extends 'base.html.twig' %}
-
-{% block title %}{{ parent() }} | Détail sortie{% endblock %}
-
-{% block body %}
-
-    <div class="container-fluid pt-4">
-        <div class="row">
-            <div class="col">
-                <h2>Détail de la sortie</h2>
-            </div>
-            <div class="col-2 text-right">
-                <a class="btn btn-outline-secondary mb-2" href="{{ path("liste_sorties", {'id' : sortie.id}) }}">Retour</a>
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col">
-                <p>Etat :
-                    {% if sortie.etat.libelle == 'Brouillon' %}
-                        <span><b>Brouillon</b></span>
-                    {% elseif sortie.etat.libelle == 'Publiée' %}
-                        <span class="text-primary"><b>Publiée</b></span>
-                    {% elseif sortie.etat.libelle == 'Clôturée' %}
-                        <span class="text-warning"><b>Clôturée</b></span>
-                    {% elseif sortie.etat.libelle == 'Annulée' %}
-                        <span class="text-danger"><b>Annulée</b></span>
-                        <br>Motif : {{ sortie.motif }}
-                    {% elseif sortie.etat.libelle == 'En cours' %}
-                        <span class="text-info"><b>En cours</b></span>
-                    {% elseif sortie.etat.libelle == 'Terminée' %}
-                        <span class="text-success"><b>Terminée</b></span>
-                    {% elseif sortie.etat.libelle == 'Archivée' %}
-                        <span>Archivée</span>
+                        <span class="text-secondary"><b>Archivée</b></span>
                     {% endif %}
                 </p>
             </div>
@@ -396,23 +199,14 @@
                 </div>
 
 
-
             {% endif %}
                    </div>
                 <div class="col-12 col-sm-6 col-md-8">
                     <div class="row">
-                        <iframe class="col" width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q={{ sortie.lieu.ville.nom }}&amp;ie=UTF8&amp;&amp;output=embed"></iframe>
+                        <iframe class="col" width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q={{ sortie.lieu.adresse }}&amp;ie=UTF8&amp;&amp;output=embed"></iframe>
                     </div>
                 </div>
             </div>
 
-{#        </div>
-
-                API GOOGLE MAP
-                Affichage de la localisation de la ville sur une carte
-                <hr>
-
-
-    </div>#}
 
 {% endblock %}

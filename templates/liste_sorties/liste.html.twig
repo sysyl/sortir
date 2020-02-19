@@ -356,7 +356,7 @@
                                     <a id="Afficher"  href="{{ path('sortie_detail',{'id':sortie.id}) }}">Afficher</a>
 
                                 </td>
-                                <td>{{ sortie.etat.libelle }}</td>
+                                <td class="text-secondary"><b>{{ sortie.etat.libelle }}</b></td>
                             </tr>
                         {% endfor %}
                     {% endif %}

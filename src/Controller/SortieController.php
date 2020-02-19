@@ -276,7 +276,6 @@ class SortieController extends AbstractController
      */
     public function archiver(EntityManagerInterface $em, $id)
     {
-
         //recuperer la fiche de la sortie dans la base de données
         $sortie = $em->getRepository(Sortie::class)->find($id);
         $etatAnnuler = $this->getDoctrine()->getRepository(Etat::class)->findOneBy(['libelle' => 'Archivée']);
@@ -287,7 +286,7 @@ class SortieController extends AbstractController
             $sortie->setEtat($etatAnnuler);
             $em->persist($sortie);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('success', 'Sortie Archivé !');
+            $this->get('session')->getFlashBag()->add('success', 'Sortie Archivée !');
             return $this->redirectToRoute('liste_sorties');
     }
 
