@@ -10,6 +10,7 @@ use App\Entity\Ville;
 use App\Form\SiteType;
 use App\Form\VilleType;
 use DateTime;
+use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use PhpParser\Node\Stmt\Foreach_;
@@ -63,28 +64,92 @@ class ListeSortiesController extends AbstractController
                 $emi->flush();
             }
         }
-        foreach ($sortiesCloturees as $laSortieCloturee) {
 
+        foreach ($sortiesCloturees as $laSortieCloturee) {
             $interval = date_diff($laSortieCloturee->getDateHeureDebut(), $localDate);
 
             if($interval->format('%R%a') >= '+30'){
                 $laSortieCloturee->setEtat($etatArchive);
-                $var = $interval->format('%R%a');
                 $emi->persist($laSortieCloturee);
                 $emi->flush();
             }
         }
-        foreach ($sortiesTerminees as $laSortieTerminee) {
 
+        foreach ($sortiesTerminees as $laSortieTerminee) {
             $interval = date_diff($laSortieTerminee->getDateHeureDebut(), $localDate);
 
           if($interval->format('%R%a') >= '+30'){
               $laSortieTerminee->setEtat($etatArchive);
-              $var = $interval->format('%R%a');
               $emi->persist($laSortieTerminee);
               $emi->flush();
             }
         }
+
+      foreach ($sortiesPubliees as $laSortiePlublier) {
+          $interval = date_diff($laSortiePlublier->getDateHeureDebut(), $localDate);
+          //dump($interval->format('%ad %hh %im').'.........');
+          $TEST = $laSortiePlublier->getDuree();
+
+
+          //==========
+          $hours =  floor($TEST/60);
+          if($hours<10){
+              $hours = '0'.$hours;
+          }
+          $mins =   $TEST % 60;
+          $convertor = $hours.'h'.' '.$mins.'m';
+          //==========
+
+          //dump($convertor);
+          $localDate->format('H\h i\m');
+          //dump($laSortiePlublier->getDateHeureDebut());
+           if($interval->format("%ad %hh")=='0d 0h'){
+               dump($interval->format("%a"));
+                   if(date('Y-m-d H:i',strtotime(   '+'.$hours.' hour +'.$mins.'minutes',strtotime($laSortiePlublier->getDateHeureDebut()->format('Y-m-d H:i')))) > $localDate->format('Y-m-d H:i')){
+                       dump($laSortiePlublier);
+                       $laSortiePlublier->setEtat($etatEncours);
+                       $emi->persist($laSortiePlublier);
+                       $emi->flush();
+                   }
+
+            }
+           /*
+            *    if(){
+                   dump($laSortiePlublier);
+                   $laSortiePlublier->setEtat($etatTermine);
+                   $emi->persist($laSortiePlublier);
+                   $emi->flush();
+            */
+
+
+        }
+      foreach ($sortiesEncours as $laSortieEncours){
+          $interval = date_diff($laSortieEncours->getDateHeureDebut(), $localDate);
+          dump(540/60);
+          $TEST = $laSortieEncours->getDuree();
+
+
+          //==========
+          $hours =  floor($TEST/60);
+          if($hours<10){
+              $hours = '0'.$hours;
+          }
+          $mins =   $TEST % 60;
+          $convertor = $hours.'h'.' '.$mins.'m';
+          //==========
+
+          //dump($convertor);
+          $localDate->format('H\h i\m');
+          //dump(date('Y-m-d H:i',strtotime(   '+'.$hours.' hour +'.$mins.'minutes',strtotime($laSortieEncours->getDateHeureDebut()->format('Y-m-d H:i')))));
+              if(date('Y-m-d H:i',strtotime(   '+'.$hours.' hour +'.$mins.'minutes',strtotime($laSortieEncours->getDateHeureDebut()->format('Y-m-d H:i')))) < $localDate->format('Y-m-d H:i')){
+                  dump($laSortieEncours);
+                  $laSortieEncours->setEtat($etatTermine);
+                  $emi->persist($laSortieEncours);
+                  $emi->flush();
+              }
+
+
+      }
 
         $sortiesPhone = $emi->getRepository(Sortie::class)->findBy(['etat' => [$etatCree, $etatPublie, $etatCloture, $etatEncours, $etatTermine], 'site' => $this->getUser()->getSite()]);
 
