@@ -204,14 +204,17 @@
                             </td>
                             <td><a href="{{ path('profil_detail',{'id':sortie.organisateur.id}) }}">{{ sortie.organisateur.pseudo }}</a></td>
                             <td>
-
                                 <a href="{{ path('sortie_detail',{'id':sortie.id}) }}">Afficher</a>
-
                                 <input type="hidden" name="isJeSuisInscrit" value="{{ jeSuisInscrit }}">
                                 {% if jeSuisInscrit %}
                                     <a href="{{ path('desister_sortie',{'id':sortie.id}) }}"> - Se désister</a>
                                 {% endif %}
-
+                                {% if sortie.nom == "Sauve qui peut !" %}
+                                    <a href="{{ path('run') }}"> - Se sauver 🏃‍</a>
+                                {% endif %}
+                                {% if sortie.nom == "Admin vs Corona" %}
+                                    <a href="{{ path('fight') }}"> - Boss final 🥊‍</a>
+                                {% endif %}
                             </td>
                             <td class="text-warning"><b>{{ sortie.etat.libelle }}</b></td>
                         </tr>
@@ -244,9 +247,13 @@
                             </td>
                             <td><a href="{{ path('profil_detail',{'id':sortie.organisateur.id}) }}">{{ sortie.organisateur.pseudo }}</a></td>
                             <td>
-
                                 <a href="{{ path('sortie_detail',{'id':sortie.id}) }}">Afficher</a>
-
+                                {% if sortie.nom == "Sauve qui peut !" %}
+                                    <a href="{{ path('run') }}"> - Se sauver 🏃‍</a>
+                                {% endif %}
+                                {% if sortie.nom == "Admin vs Corona" %}
+                                    <a href="{{ path('fight') }}"> - Boss final 🥊‍</a>
+                                {% endif %}
                             </td>
                             <td class="text-info"><b>{{ sortie.etat.libelle }}</b></td>
                         </tr>

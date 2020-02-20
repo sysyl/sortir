@@ -238,6 +238,28 @@ class ListeSortiesController extends AbstractController
     }
 
     /**
+     * Se sauver d'une Sortie
+     * @Route("/run", name="run")
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function sauver(Request $request)
+    {
+        return $this->render('liste_sorties/sauveToi.html.twig');
+    }
+
+    /**
+     * Se battre contre le virus
+     * @Route("/fight", name="fight")
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function fight(Request $request)
+    {
+        return $this->render('liste_sorties/combat.html.twig');
+    }
+
+    /**
      * @Route("/liste_villes", name="liste_villes")
      * @param EntityManagerInterface $emi
      * @return Response
