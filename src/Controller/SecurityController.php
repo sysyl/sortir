@@ -55,6 +55,8 @@ class SecurityController extends AbstractController
             $em->persist($utilisateur);
             $em->flush();
 
+            $this->get('session')->getFlashBag()->add('success', "Votre mot de passe a été réinitialisé !");
+
         }
         return $this->render('security/mdp_oublie.html.twig');
     }

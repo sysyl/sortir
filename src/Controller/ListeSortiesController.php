@@ -52,29 +52,23 @@ class ListeSortiesController extends AbstractController
         $sortiesTerminees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatTermine]);
         $sortiesArchivees = $emi->getRepository(Sortie::class)->findBy(['etat' => $etatArchive]);
 
-//        //LES DATES
+
+//      GESTION DES ETATS PAR DATES ET HEURES
         $localDate = new DateTime("now");
+
+
+        // Etat archivé sur les sorties annulées si +30 jours
         foreach ($sortiesAnnulees as $laSortieAnnulee) {
             $interval = date_diff($laSortieAnnulee->getDateHeureDebut(), $localDate);
 
             if($interval->format('%R%a') >= '+30'){
-
                 $laSortieAnnulee->setEtat($etatArchive);
                 $emi->persist($laSortieAnnulee);
                 $emi->flush();
             }
         }
 
-        foreach ($sortiesCloturees as $laSortieCloturee) {
-            $interval = date_diff($laSortieCloturee->getDateHeureDebut(), $localDate);
-
-            if($interval->format('%R%a') >= '+30'){
-                $laSortieCloturee->setEtat($etatArchive);
-                $emi->persist($laSortieCloturee);
-                $emi->flush();
-            }
-        }
-
+        // Etat archivé sur les sorties terminées si +30 jours
         foreach ($sortiesTerminees as $laSortieTerminee) {
             $interval = date_diff($laSortieTerminee->getDateHeureDebut(), $localDate);
 
@@ -85,71 +79,67 @@ class ListeSortiesController extends AbstractController
             }
         }
 
-      foreach ($sortiesPubliees as $laSortiePlublier) {
-          $interval = date_diff($laSortiePlublier->getDateHeureDebut(), $localDate);
-          //dump($interval->format('%ad %hh %im').'.........');
-          $TEST = $laSortiePlublier->getDuree();
-
-
-          //==========
-          $hours =  floor($TEST/60);
-          if($hours<10){
-              $hours = '0'.$hours;
-          }
-          $mins =   $TEST % 60;
-          $convertor = $hours.'h'.' '.$mins.'m';
-          //==========
-
-          //dump($convertor);
-          $localDate->format('H\h i\m');
-          //dump($laSortiePlublier->getDateHeureDebut());
-           if($interval->format("%ad %hh")=='0d 0h'){
-               dump($interval->format("%a"));
-                   if(date('Y-m-d H:i',strtotime(   '+'.$hours.' hour +'.$mins.'minutes',strtotime($laSortiePlublier->getDateHeureDebut()->format('Y-m-d H:i')))) > $localDate->format('Y-m-d H:i')){
-                       dump($laSortiePlublier);
-                       $laSortiePlublier->setEtat($etatEncours);
-                       $emi->persist($laSortiePlublier);
-                       $emi->flush();
-                   }
-
+        // Etat en cours sur les sorties publiées si durée en cours
+        foreach ($sortiesPubliees as $laSortiePlubliee) {
+            $interval = date_diff($laSortiePlubliee->getDateHeureDebut(), $localDate);
+            $duree = $laSortiePlubliee->getDuree();
+            $hours =  floor($duree/60);
+            if($hours<10){
+                $hours = '0'.$hours;
             }
-           /*
-            *    if(){
-                   dump($laSortiePlublier);
-                   $laSortiePlublier->setEtat($etatTermine);
-                   $emi->persist($laSortiePlublier);
-                   $emi->flush();
-            */
+            $mins =   $duree % 60;
 
+            dump($interval->format("%ad %hh %im"));
+            // Si heure sortie + durée > localdate -> En cours
+            if($interval->format("%ad")=='0d'){
+                if($laSortiePlubliee->getDateHeureDebut()->format('Y-m-d H:i') <= $localDate->format('Y-m-d H:i')){
+
+                   if(date('Y-m-d H:i',strtotime(   '+'.$hours.' hour +'.$mins.'minutes',strtotime($laSortiePlubliee->getDateHeureDebut()->format('Y-m-d H:i')))) > $localDate->format('Y-m-d H:i')){
+                        $laSortiePlubliee->setEtat($etatEncours);
+                        $emi->persist($laSortiePlubliee);
+                        $emi->flush();
+
+                    }
+                }
+            }
+        }
+
+        // Etat en cours sur les sorties cloturées si durée en cours
+        foreach ($sortiesCloturees as $laSortieCloturee){
+            $duree = $laSortieCloturee->getDuree();
+            $hours =  floor($duree/60);
+            if($hours<10){
+                $hours = '0'.$hours;
+            }
+            $mins =   $duree % 60;
+            if($laSortieCloturee->getDateHeureDebut()->format('Y-m-d H:i') <= $localDate->format('Y-m-d H:i')){
+
+                if(date('Y-m-d H:i',strtotime(   '+'.$hours.' hour +'.$mins.'minutes',strtotime($laSortieCloturee->getDateHeureDebut()->format('Y-m-d H:i')))) > $localDate->format('Y-m-d H:i')){
+                    $laSortieCloturee->setEtat($etatEncours);
+                    $emi->persist($laSortieCloturee);
+                    $emi->flush();
+
+                }
+            }
 
         }
-      foreach ($sortiesEncours as $laSortieEncours){
-          $interval = date_diff($laSortieEncours->getDateHeureDebut(), $localDate);
-          dump(540/60);
-          $TEST = $laSortieEncours->getDuree();
 
-
-          //==========
-          $hours =  floor($TEST/60);
-          if($hours<10){
+        // Etat terminé sur les sorties en cours si durée terminée
+        foreach ($sortiesEncours as $laSortieEncours){
+            $duree = $laSortieEncours->getDuree();
+            $hours =  floor($duree/60);
+            if($hours<10){
               $hours = '0'.$hours;
-          }
-          $mins =   $TEST % 60;
-          $convertor = $hours.'h'.' '.$mins.'m';
-          //==========
+            }
+            $mins =   $duree % 60;
 
-          //dump($convertor);
-          $localDate->format('H\h i\m');
-          //dump(date('Y-m-d H:i',strtotime(   '+'.$hours.' hour +'.$mins.'minutes',strtotime($laSortieEncours->getDateHeureDebut()->format('Y-m-d H:i')))));
-              if(date('Y-m-d H:i',strtotime(   '+'.$hours.' hour +'.$mins.'minutes',strtotime($laSortieEncours->getDateHeureDebut()->format('Y-m-d H:i')))) < $localDate->format('Y-m-d H:i')){
-                  dump($laSortieEncours);
-                  $laSortieEncours->setEtat($etatTermine);
-                  $emi->persist($laSortieEncours);
-                  $emi->flush();
-              }
-
-
-      }
+            // Si heure sortie + durée < localDate -> Terminee
+            if(date('Y-m-d H:i',strtotime(   '+'.$hours.' hour +'.$mins.'minutes',strtotime($laSortieEncours->getDateHeureDebut()->format('Y-m-d H:i')))) < $localDate->format('Y-m-d H:i')){
+                $laSortieEncours->setEtat($etatTermine);
+                $emi->persist($laSortieEncours);
+                $emi->flush();
+            }
+        }
 
         $sortiesPhone = $emi->getRepository(Sortie::class)->findBy(['etat' => [$etatCree, $etatPublie, $etatCloture, $etatEncours, $etatTermine], 'site' => $this->getUser()->getSite()]);
 

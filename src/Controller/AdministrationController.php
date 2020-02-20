@@ -111,6 +111,7 @@ class AdministrationController extends AbstractController
                 //token 14
                 $site = $em->getRepository(Site::class)->find((int) $csvuser[15]);
                 $user->setSite($site); //int
+                
                 $em->persist($user);
             }
         }
