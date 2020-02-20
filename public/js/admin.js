@@ -78,22 +78,25 @@ document.addEventListener('DOMContentLoaded', () =>{
     const csvInput = document.querySelector("#import_users_file_csv");
     const csvLabel = document.querySelector("#Error");
     const import_users_Importer = document.querySelector("#importButton");
+    import_users_Importer.style.display = 'none';
     csvLabel.style.display = 'none';
-    //import_users_Importer.style.visibility = 'visible';
-    csvInput.addEventListener('change', evt => {
 
+    csvInput.addEventListener('change', evt => {
         const { value } = evt.currentTarget;
         if (value) {
             const fileName = value.split("\\").pop() || value.split("/").pop();
             console.log(fileName);
-            if(fileName.substr(fileName.indexOf('.')) !='.csv'){
+            if (fileName.substr(fileName.indexOf('.')) !='.csv') {
                 csvLabel.style.display = 'block';
                 import_users_Importer.style.display = 'none';
-            }else{
+            }
+            else {
                 csvLabel.style.display = 'none';
                 import_users_Importer.style.display = 'block';
             }
-
+        } else {
+            import_users_Importer.style.display = 'none';
+            csvLabel.style.display = 'none';
         }
     });
 

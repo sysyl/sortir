@@ -80,16 +80,14 @@ class AdministrationController extends AbstractController
      * @param EntityManagerInterface $em
      * @param UserPasswordEncoderInterface $passwordEncoder
      */
+
     public function startImport($file, EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder) {
-
-        //TODO verification on file
-
         $csvArr = str_getcsv($file,",", "","/n");
         $chunked = array_chunk($csvArr,16);
 
         foreach ($chunked as $csvuser) {
             $user = new Utilisateur();
-            if(sizeof($csvuser) == 16) {
+            if(sizeof($csvuser)  == 16) {
                 $user->setNom($csvuser[0]); // str
                 $user->setPrenom($csvuser[1]); //str
                 if ($csvuser[2] != "") {
@@ -98,7 +96,8 @@ class AdministrationController extends AbstractController
                 $user->setMail($csvuser[3]); //str
                 $user->setAdmin((int)$csvuser[4]); //bool
                 $user->setActif((int)$csvuser[5]); //bool
-                $user->setPassword($passwordEncoder->encodePassword($user,$user->getPrenom().$user->getNom())); //str
+                $user->setPassword(
+                    $passwordEncoder->encodePassword($user, $user->getPrenom().$user->getNom())); //str
                 if ($csvuser[7] != "") {
                     $user->setPictureFilename($csvuser[7]); //str
                 }
@@ -107,16 +106,61 @@ class AdministrationController extends AbstractController
                 $user->setAdministrateurPublication((int)$csvuser[10]); //bool
                 $user->setPseudo($csvuser[11]); //str
                 $user->setAdministrationModification((int)$csvuser[12]); //bool
-                $user->setNotifVeilleSortie((int)$csvuser[13]); //bool
                 //token 14
-                $site = $em->getRepository(Site::class)->find((int) $csvuser[15]);
+                $site = $em->getRepository(Site::class)->find((int)$csvuser[15]);
                 $user->setSite($site); //int
-                
                 $em->persist($user);
             }
         }
         $em->flush();
     }
+
+    //VERIFICATION UTILISATEUR
+//    public function startImport($file, EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder) {
+//
+//        $utilisateurs = $em->getRepository(Utilisateur::class)->findAll();
+//        $csvArr = str_getcsv($file,",", "","/n");
+//        $chunked = array_chunk($csvArr,16);
+//
+//        foreach ($chunked as $csvuser) {
+//            $user = new Utilisateur();
+//            if(sizeof($csvuser)  == 16) {
+//                foreach ($utilisateurs as $utilisateur) {
+//                    if ($utilisateur->getMail() == $csvuser[3]) {
+//                        $this->get('session')->getFlashBag()->add('danger', "Utilisateur ". $utilisateur->getNom() ." déjà existant...");
+//                    }
+//                    else {
+//                        dump( $csvuser[3].' / '.$utilisateur->getMail());
+//                        $user->setNom($csvuser[0]); // str
+//                        $user->setPrenom($csvuser[1]); //str
+//                        if ($csvuser[2] != "") {
+//                            $user->setTelephone($csvuser[2]);  //str nullable
+//                        }
+//                        $user->setMail($csvuser[3]); //str
+//                        $user->setAdmin((int)$csvuser[4]); //bool
+//                        $user->setActif((int)$csvuser[5]); //bool
+//                        $user->setPassword(
+//                            $passwordEncoder->encodePassword($user, $user->getPrenom().$user->getNom())
+//                        ); //str
+//                        if ($csvuser[7] != "") {
+//                            $user->setPictureFilename($csvuser[7]); //str
+//                        }
+//                        $user->setPublicationParSite((int)$csvuser[8]); //bool
+//                        $user->setOrganisateurInscriptionDesistement((int)$csvuser[9]); //bool
+//                        $user->setAdministrateurPublication((int)$csvuser[10]); //bool
+//                        $user->setPseudo($csvuser[11]); //str
+//                        $user->setAdministrationModification((int)$csvuser[12]); //bool
+//                        $user->setNotifVeilleSortie((int)$csvuser[13]); //bool
+//                        //token 14
+//                        $site = $em->getRepository(Site::class)->find((int)$csvuser[15]);
+//                        $user->setSite($site); //int
+//                    }
+//                }
+//                $em->persist($user);
+//            }
+//        }
+//        $em->flush();
+//    }
 
 
     /**

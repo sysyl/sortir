@@ -89,7 +89,6 @@ class ListeSortiesController extends AbstractController
             }
             $mins =   $duree % 60;
 
-            dump($interval->format("%ad %hh %im"));
             // Si heure sortie + durée > localdate -> En cours
             if($interval->format("%ad")=='0d'){
                 if($laSortiePlubliee->getDateHeureDebut()->format('Y-m-d H:i') <= $localDate->format('Y-m-d H:i')){
