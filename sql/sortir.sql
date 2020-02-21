@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  jeu. 13 fév. 2020 à 16:23
+-- Généré le :  ven. 21 fév. 2020 à 09:57
 -- Version du serveur :  10.4.10-MariaDB
 -- Version de PHP :  7.3.12
 
@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `lieu` (
   `adresse` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_2F577D59A73F0036` (`ville_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `lieu`
@@ -73,7 +73,12 @@ INSERT INTO `lieu` (`id`, `ville_id`, `nom`, `adresse`) VALUES
 (2, 226, 'L\'engrenage', '4 Allée de l\'Île Gloriette, 44000 Nantes'),
 (3, 226, 'La Bodega', '8 Rue Beauregard, 44000 Nantes'),
 (4, 227, 'Tour Eiffel', 'Champ de Mars, 5 Avenue Anatole France, 75007 Paris'),
-(5, 1, 'Rdv en terre inconnue', '10 place de la Mairie 01190 Ozan.');
+(5, 1, 'Rdv en terre inconnue', '10 place de la Mairie 01190 Ozan.'),
+(6, 226, 'Chez moi', '4 Rue de Coulmiers'),
+(15, 226, 'VF Burger', '12 Allée des Tanneurs, 44000'),
+(16, 227, 'Arc de Triomphe', 'Place Charles de Gaulle, 75008'),
+(19, 227, 'Le Louvre', 'Rue de Rivoli, 75001'),
+(20, 228, 'Wuhan hospital', 'Wuhan Central Hospital, Shengli Street, Jiang\'an District, Wuhan, Hubei, China');
 
 -- --------------------------------------------------------
 
@@ -110,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `rejoindre` (
   PRIMARY KEY (`id`),
   KEY `IDX_56E78755187326B7` (`son_utilisateur_id`),
   KEY `IDX_56E78755DB3FCCAB` (`sa_sortie_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `rejoindre`
@@ -122,7 +127,21 @@ INSERT INTO `rejoindre` (`id`, `son_utilisateur_id`, `sa_sortie_id`, `date_inscr
 (16, 1, 4, '2020-02-12 14:03:18'),
 (18, 7, 3, '2020-02-12 15:46:04'),
 (19, 7, 4, '2020-02-12 15:46:07'),
-(20, 1, 5, '2020-02-13 12:48:25');
+(23, 10, 2, '2020-02-18 09:39:54'),
+(24, 10, 4, '2020-02-18 09:39:56'),
+(27, 1, 2, '2020-02-18 13:29:29'),
+(56, 1, 5, '2020-02-18 14:58:10'),
+(58, 1, 12, '2020-02-19 09:59:15'),
+(60, 64, 12, '2020-02-19 10:12:38'),
+(69, 1, 19, '2020-02-20 09:52:34'),
+(70, 7, 19, '2020-02-20 09:52:49'),
+(72, 103, 22, '2020-02-20 14:55:48'),
+(73, 1, 22, '2020-02-20 14:55:59'),
+(74, 7, 22, '2020-02-20 14:56:11'),
+(75, 103, 23, '2020-02-20 16:01:36'),
+(76, 1, 23, '2020-02-20 16:01:47'),
+(77, 1, 18, '2020-02-20 16:47:06'),
+(78, 103, 18, '2020-02-20 16:48:21');
 
 -- --------------------------------------------------------
 
@@ -172,20 +191,27 @@ CREATE TABLE IF NOT EXISTS `sortie` (
   KEY `IDX_3C3FD3F2D5E86FF` (`etat_id`),
   KEY `IDX_3C3FD3F2F6BD1646` (`site_id`),
   KEY `IDX_3C3FD3F2D936B2FA` (`organisateur_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `sortie`
 --
 
 INSERT INTO `sortie` (`id`, `lieu_id`, `etat_id`, `site_id`, `organisateur_id`, `nom`, `date_heure_debut`, `duree`, `date_limite_inscription`, `nb_inscription_max`, `commentaire`, `nb_inscrits`, `motif`) VALUES
-(1, 1, 8, 2, 7, 'Petite soirée entre potes', '2020-02-11 21:00:00', 2, '2020-02-11 20:00:00', 10, 'Soirée au bar', 0, 'Sans raison'),
-(2, 2, 7, 2, 7, 'Soirée entre filles', '2020-02-22 21:00:00', 3, '2020-02-20 21:00:00', 5, 'Soirée à l\'Engrenage', 0, NULL),
-(3, 1, 9, 2, 7, 'Ca va etre chaud', '2020-02-12 09:30:00', 1, '2020-02-11 17:30:00', 4, 'Sortie de test', 4, NULL),
-(4, 1, 7, 1, 10, 'Soirée mousse', '2020-02-12 21:00:00', 2, '2020-02-12 20:00:00', 100, 'On aime pas les soirées nous ?', 2, NULL),
-(5, 3, 9, 1, 1, 'Soirée de l\'admin', '2020-02-13 16:00:00', 1, '2020-02-13 14:00:00', 1, 'Ma soirée en solo', 1, NULL),
-(6, 4, 7, 1, 1, 'Escalade', '2020-02-15 08:00:00', 2, '2020-02-14 08:00:00', 3, 'Petite montée ?', 0, NULL),
-(7, 5, 7, 1, 1, 'Ma sortie en solitaire', '2020-02-13 20:00:00', 6, '2020-02-14 10:00:00', 1, 'Qui connait ?', 0, NULL);
+(1, 1, 11, 2, 7, 'Petite soirée entre potes', '2020-02-11 21:00:00', 180, '2020-02-11 20:00:00', 10, 'Soirée au bar', 0, 'Sans raison'),
+(2, 2, 11, 2, 7, 'Soirée entre filles', '2020-02-20 08:12:00', 20, '2020-02-20 21:00:00', 5, 'Soirée à l\'Engrenage', 3, NULL),
+(3, 1, 11, 2, 7, 'Ca va etre chaud', '2020-02-12 09:30:00', 45, '2020-02-11 17:30:00', 4, 'Sortie de test', 4, NULL),
+(4, 1, 11, 1, 10, 'Soirée mousse', '2020-02-12 21:00:00', 20, '2020-02-12 20:00:00', 100, 'On aime pas les soirées nous ?', 3, NULL),
+(5, 3, 12, 1, 1, 'Soirée de l\'admin', '2019-12-10 16:00:00', 100, '2020-02-13 14:00:00', 1, 'Ma soirée en solo', 1, 'tg'),
+(6, 4, 8, 1, 1, 'Escalade', '2022-12-10 00:00:00', 20, '2020-02-14 08:00:00', 3, 'Petite montée ?', 0, NULL),
+(7, 5, 11, 1, 1, 'Ma sortie en solitaire', '2020-02-13 20:00:00', 6, '2020-02-14 10:00:00', 1, 'Qui connait ?', 0, NULL),
+(9, 15, 11, 1, 1, 'Soirée burger', '2020-02-17 20:00:00', 120, '2020-02-17 18:00:00', 5, 'Allons manger un burger  !', 0, NULL),
+(12, 1, 11, 1, 1, 'Ébat politique', '2020-02-19 09:00:00', 380, '2020-02-21 08:30:00', 2, 'Tête à tête avec Éric Zemmour', 2, NULL),
+(17, 19, 6, 2, 7, 'Musée du louvre', '2020-03-01 09:00:00', 360, '2020-02-29 21:00:00', 10, 'Visite du musée du Louvre', 0, NULL),
+(18, 6, 7, 1, 1, 'Anniversaire d\'Edouard 🤡', '2020-05-19 21:00:00', 300, '2020-05-18 20:00:00', 40, 'Grosse soirée chez Edouard, vous êtes tous invité !', 2, NULL),
+(19, 3, 9, 1, 1, 'Test inscription clôturée', '2020-05-01 10:00:00', 20, '2020-04-01 10:00:00', 2, 'Test clôture des inscriptions', 2, NULL),
+(22, 20, 10, 1, 103, 'Sauve qui peut !', '2020-02-21 09:00:00', 540, '2020-02-21 08:00:00', 3, 'Vous verrez, ça va être fun', 3, NULL),
+(23, 20, 9, 1, 103, 'Admin vs Corona', '2020-02-29 10:00:00', 10, '2020-02-29 08:00:00', 2, 'Mieux que l\'octogone sans règle', 2, NULL);
 
 -- --------------------------------------------------------
 
@@ -216,16 +242,20 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
   UNIQUE KEY `UNIQ_1D1C63B35126AC48` (`mail`),
   UNIQUE KEY `UNIQ_1D1C63B386CC499D` (`pseudo`),
   KEY `IDX_1D1C63B3F6BD1646` (`site_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=108 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `utilisateur`
 --
 
 INSERT INTO `utilisateur` (`id`, `site_id`, `nom`, `prenom`, `telephone`, `mail`, `admin`, `actif`, `password`, `picture_filename`, `publication_par_site`, `organisateur_inscription_desistement`, `administrateur_publication`, `pseudo`, `administration_modification`, `notif_veille_sortie`, `token`) VALUES
-(1, 1, 'langer', 'sylvain', '0786745425', 'langer.sylvain95@gmail.com', 1, 1, '$argon2id$v=19$m=65536,t=4,p=1$Nk9SWmZMSFNTRmEuS0pBSQ$cI39h6m6gzLq5bDWrvMlnpd7pGJmqRHv4LTNjq34AEU', NULL, NULL, NULL, NULL, 'sylbouille', NULL, NULL, NULL),
+(1, 1, 'langer', 'sylvain', '0786745425', 'langer.sylvain95@gmail.com', 1, 1, '$argon2id$v=19$m=65536,t=4,p=1$Nk9SWmZMSFNTRmEuS0pBSQ$cI39h6m6gzLq5bDWrvMlnpd7pGJmqRHv4LTNjq34AEU', 'pink-5e4ba5a71f46d.jpeg', 1, 1, 1, 'sylbouille', 1, NULL, NULL),
 (7, 2, 'poussin', 'rouge', '0786745425', 'poussin.rouge@gmail.com', 0, 1, '$argon2id$v=19$m=65536,t=4,p=1$cGgvQ2VyVkVlQ0VVczBBbw$vcD4focaNy5FHW5JXZKy+SyDTSQc/63uxxbQOUOhLiE', NULL, 0, 0, 0, 'Red', 0, NULL, NULL),
-(10, 1, 'test', 'test', '0000000000', 'test@test.com', 0, 1, '$argon2id$v=19$m=65536,t=4,p=1$L1dOLjJzU0pTbFhWbTN0Vw$1jE/BuvIoXZhdFKgSefCBG9FQw6sBq5VwLkVVGoDcEY', NULL, 0, 0, 0, 'jacky', 0, NULL, NULL);
+(10, 1, 'test', 'test', '0786745425', 'test@test.com', 1, 1, '$argon2id$v=19$m=65536,t=4,p=1$WWhlenVGZW9mLmp1SEF2Sg$F4T1FyrAVUG/CuuV3t2H4leSsvFFEjKln6wn+seFVps', NULL, 0, 0, 0, 'jacky', 0, NULL, '6499dbaf8fdfc8191e57a39c50d597fce2294956'),
+(64, 3, 'zemmour', 'eric', NULL, 'eric.zemmour@grandremplacement.fr', 0, 1, '$argon2id$v=19$m=65536,t=4,p=1$SWFhZGFNNFJqY0E2UGpiQg$PklQd4Halt4sOA35n8NeXNadncccaEoC8t69ohwtz/k', 'ericzemmour-5e4d09ed03ea8.png', 0, 0, NULL, 'Ben voyons', NULL, NULL, '159d99b6f3383976143bca3f05076de407236ca8'),
+(103, 1, 'corona', 'virus', NULL, 'viruschinois@wanadoo.fr', 0, 1, '$argon2id$v=19$m=65536,t=4,p=1$LjRDRTRLbS96eDAyYWRwYw$0vbpz71V3DfNWzgo5zgGZKhWoUqoXN+OA3hDZ7sZiAk', 'coronavirus-5e4e8fdc78150.jpeg', 0, 0, 0, 'Corona Virus', 0, NULL, NULL),
+(104, 3, '\r\ngrippe', 'aviaire', NULL, 'pouletpascuit@msn.fr', 0, 1, '$argon2id$v=19$m=65536,t=4,p=1$Si4zTjJhMTFvbUFZN1NHaA$T0yCllQdjBhYYCd99jwkqZULmKlsl0KTspGkEY1c0BI', NULL, 0, 0, 0, 'kfcmortel', 0, NULL, NULL),
+(105, 2, '\r\ngilles', 'delatourette', NULL, 'toctoc@yahoo.fr', 0, 1, '$argon2id$v=19$m=65536,t=4,p=1$QTJZaFNmTnlwcmdRZ250dw$Iz7X1/tgEveYGpR5zpwotKaJRfx4Umajq9KzGQe2lwM', NULL, 0, 0, 0, 'toctoc', 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -239,7 +269,7 @@ CREATE TABLE IF NOT EXISTS `ville` (
   `nom` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
   `code_postal` varchar(6) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=228 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=229 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `ville`
@@ -472,7 +502,8 @@ INSERT INTO `ville` (`id`, `nom`, `code_postal`) VALUES
 (224, 'SAINT-DIDIER-D\'AUSSIAT', '01340'),
 (225, 'SAINT-NIZIER-LE-BOUCHOUX', '01560'),
 (226, 'NANTES', '44000'),
-(227, 'PARIS', '75000');
+(227, 'PARIS', '75000'),
+(228, 'WUHAN', '430000');
 
 --
 -- Contraintes pour les tables déchargées

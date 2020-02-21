@@ -95,6 +95,8 @@ function displayRegistered() {
 
     filteredTrs = filteredTrs.map((tr) => {
         tr.style.display = 'table-row';
+        console.log(tr.children[4]);
+        console.log(tr.children[4].children[0]);
         if (tr.children[4].children[0].value == 1){
             tr.style.display = 'table-row';
         } else {
